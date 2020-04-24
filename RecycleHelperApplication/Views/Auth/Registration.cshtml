@@ -1,0 +1,43 @@
+﻿@model RecycleHelperApplication.ViewModels.Auth.RegistrationViewModel
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_SuperLayout.cshtml";
+}
+<div style="width: 50%;margin:0 auto">
+    <h2>Registration</h2>
+    <hr />
+    @using (Html.BeginForm("SignUp", "Auth", FormMethod.Post, new { enctype = "multipart/form-data", id = "form_register" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="control-label">
+                <b>Name<span class="red-text">*</span></b>
+            </div>
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control input-sm" } })
+            <span class="red-text">
+                @Html.ValidationMessageFor(model => model.Name)
+            </span>
+        </div>
+        <div class="form-group">
+            <div class="control-label">
+                <b>Username<span class="red-text">*</span></b>
+            </div>
+            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control input-sm" } })
+            <span class="red-text">
+                @Html.ValidationMessageFor(model => model.Username)
+            </span>
+        </div>
+        <div class="form-group">
+            <div class="control-label">
+                <b>Password<span class="red-text">*</span></b>
+            </div>
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control input-sm", @type = "password" } })
+            <span class="red-text">
+                @Html.ValidationMessageFor(model => model.Password)
+            </span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Sign Up!" class="btn btn-primary" />
+        </div>
+    }
+</div>

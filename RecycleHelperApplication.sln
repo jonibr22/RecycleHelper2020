@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecycleHelperApplication", "RecycleHelperApplication\RecycleHelperApplication.csproj", "{731310F9-0818-476A-AF06-8CCA46FE2D36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecycleHelperApplication.Data", "RecycleHelperApplication.Data\RecycleHelperApplication.Data.csproj", "{D626B356-E65A-4FD4-83E7-970B77B4DFE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecycleHelperApplication.Model", "RecycleHelperApplication.Model\RecycleHelperApplication.Model.csproj", "{51C626E5-CFDD-46D3-AD7A-315E1BE355CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecycleHelperApplication.Service", "RecycleHelperApplication.Service\RecycleHelperApplication.Service.csproj", "{1D8D84BB-908E-457F-A9E5-207C3C7C4912}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecycleHelperApplication.WebAPI", "RecycleHelperApplication.WebAPI\RecycleHelperApplication.WebAPI.csproj", "{A1B0E8F5-5E8F-4435-8D15-D88A531306CC}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RecycleHelperDatabase", "RecycleHelperDatabase\RecycleHelperDatabase.sqlproj", "{23D1B8E5-D38F-4573-8AE4-350BE071A552}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{731310F9-0818-476A-AF06-8CCA46FE2D36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{731310F9-0818-476A-AF06-8CCA46FE2D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{731310F9-0818-476A-AF06-8CCA46FE2D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{731310F9-0818-476A-AF06-8CCA46FE2D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D626B356-E65A-4FD4-83E7-970B77B4DFE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D626B356-E65A-4FD4-83E7-970B77B4DFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D626B356-E65A-4FD4-83E7-970B77B4DFE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D626B356-E65A-4FD4-83E7-970B77B4DFE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51C626E5-CFDD-46D3-AD7A-315E1BE355CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51C626E5-CFDD-46D3-AD7A-315E1BE355CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51C626E5-CFDD-46D3-AD7A-315E1BE355CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51C626E5-CFDD-46D3-AD7A-315E1BE355CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D8D84BB-908E-457F-A9E5-207C3C7C4912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D8D84BB-908E-457F-A9E5-207C3C7C4912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D8D84BB-908E-457F-A9E5-207C3C7C4912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D8D84BB-908E-457F-A9E5-207C3C7C4912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B0E8F5-5E8F-4435-8D15-D88A531306CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B0E8F5-5E8F-4435-8D15-D88A531306CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B0E8F5-5E8F-4435-8D15-D88A531306CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B0E8F5-5E8F-4435-8D15-D88A531306CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23D1B8E5-D38F-4573-8AE4-350BE071A552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23D1B8E5-D38F-4573-8AE4-350BE071A552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23D1B8E5-D38F-4573-8AE4-350BE071A552}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{23D1B8E5-D38F-4573-8AE4-350BE071A552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23D1B8E5-D38F-4573-8AE4-350BE071A552}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23D1B8E5-D38F-4573-8AE4-350BE071A552}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<RecycleHelperApplication.Model.Base.AlertMessage>
+
+
+@*@Scripts.Render("~/Content/Alert")
+    @Scripts.Render("~/Content/CustomJavaScript")*@
+<script type="text/javascript" id="alertSection">
+    @{
+    foreach (var item in Model)
+    {
+        @:$(document).ready(function () { showAlert('@(item.type)', '@(item.message)', '@(item.form)') });
+    }
+}
+
+</script>
+
