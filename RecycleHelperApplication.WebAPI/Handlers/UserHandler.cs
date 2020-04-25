@@ -13,6 +13,8 @@ namespace RecycleHelperApplication.WebAPI.Handlers
 {
     public interface IUserHandler
     {
+        Task<object> GetById(int id);
+        Task<object> Edit(JObject body);
         Task<object> DoLogin(JObject body);
         Task<object> DoRegister(JObject body);
     }
@@ -23,6 +25,58 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         public UserHandler(IUserApiService userService)
         {
             this.userService = userService;
+        }
+        public async Task<object> GetById(int id)
+        {
+            try
+            {
+                User user = await userService.GetById(id);
+                if(user == null)
+                {
+                    throw new NotFoundException("User tidak ditemukan");
+                }
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    User = user
+                };
+            }
+            catch(NotFoundException e)
+            {
+                throw e;
+            }
+            catch(Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> Edit(JObject body)
+        {
+            try
+            {
+                User userRequest = body.Value<JObject>("User").ToObject<User>();
+                User userResponse = await userService.GetById(userRequest.Id);
+
+                if (userResponse == null)
+                {
+                    throw new NotFoundException("User dengan ID tersebut tidak ditemukan");
+                }
+                ExecuteResult result = await userService.InsertUpdate(userRequest);
+
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch (NotFoundException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
         }
         public async Task<object> DoLogin(JObject body)
         {

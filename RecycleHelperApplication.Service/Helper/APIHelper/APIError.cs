@@ -44,5 +44,17 @@ namespace RecycleHelperApplication.Service.Helper.APIHelper
                 Message = e.Message
             };
         }
+        public static object From(NotFoundException e)
+        {
+            return new
+            {
+                Status = new
+                {
+                    Code = e.Code,
+                    Message = "Entity Not Found"
+                },
+                Message = e.Message
+            };
+        }
     }
 }

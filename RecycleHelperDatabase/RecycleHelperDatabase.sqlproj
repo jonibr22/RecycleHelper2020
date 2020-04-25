@@ -62,6 +62,7 @@
     <Build Include="msUser.sql" />
     <Build Include="User_GetByUsername.sql" />
     <Build Include="User_InsertUpdate.sql" />
+    <Build Include="User_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="RecycleHelperDatabase.publish.xml" />

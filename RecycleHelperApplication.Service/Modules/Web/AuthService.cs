@@ -38,7 +38,8 @@ namespace RecycleHelperApplication.Service.Modules.Web
                 int Id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
                 return Id;
             }
-            throw new Exception(result.GetMessage());
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
         }
         public async Task<int> Register(User user)
         {
@@ -58,7 +59,8 @@ namespace RecycleHelperApplication.Service.Modules.Web
                 int Id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
                 return Id;
             }
-            throw new Exception(result.GetMessage());
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
         }
     }
 }
