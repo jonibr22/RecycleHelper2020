@@ -44,6 +44,8 @@
     <Compile Include="Base\AlertMessage.cs" />
     <Compile Include="Base\ExecuteResult.cs" />
     <Compile Include="Base\StoredProcedure.cs" />
+    <Compile Include="Models\Panduan.cs" />
+    <Compile Include="Models\Bahan.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

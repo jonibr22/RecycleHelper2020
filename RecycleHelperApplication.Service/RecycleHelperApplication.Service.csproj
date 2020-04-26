@@ -86,6 +86,8 @@
     <Compile Include="Helper\ReflectionExtensions.cs" />
     <Compile Include="Helper\SessionEnum.cs" />
     <Compile Include="Helper\Util.cs" />
+    <Compile Include="Modules\WebAPI\PanduanApiService.cs" />
+    <Compile Include="Modules\WebAPI\BahanApiService.cs" />
     <Compile Include="Modules\WebAPI\UserApiService.cs" />
     <Compile Include="Modules\Web\AuthService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

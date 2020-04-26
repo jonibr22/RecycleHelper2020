@@ -57,6 +57,8 @@
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\PanduanRepository.cs" />
+    <Compile Include="Repositories\BahanRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
