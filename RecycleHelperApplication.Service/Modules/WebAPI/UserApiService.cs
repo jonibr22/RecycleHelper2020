@@ -12,6 +12,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 {
     public interface IUserApiService
     {
+        Task<User> GetById(int id);
         Task<User> GetByUsername(string username);
         Task<ExecuteResult> InsertUpdate(User user);
     }
@@ -21,6 +22,13 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         public UserApiService(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
+        }
+        public async Task<User> GetById(int id)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@Id", id)
+            };
+            return await userRepository.ExecSPToSingleAsync("User_GetById @Id ", Param);
         }
         public async Task<User> GetByUsername(string username)
         {

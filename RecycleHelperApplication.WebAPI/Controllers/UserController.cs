@@ -20,6 +20,40 @@ namespace RecycleHelperApplication.WebAPI.Controllers
         {
             this.userHandler = userHandler;
         }
+        [Route("{Id}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetById(int id)
+        {
+            try
+            {
+                return Json(await userHandler.GetById(id));
+            }
+            catch (NotFoundException e)
+            {
+                return Json(APIError.From(e));
+            }
+            catch (InternalServerErrorException e)
+            {
+                return Json(APIError.From(e));
+            }
+        }
+        [Route("Edit")]
+        [HttpPut]
+        public async Task<IHttpActionResult> Edit(JObject body)
+        {
+            try
+            {
+                return Json(await userHandler.Edit(body));
+            }
+            catch (NotFoundException e)
+            {
+                return Json(APIError.From(e));
+            }
+            catch (InternalServerErrorException e)
+            {
+                return Json(APIError.From(e));
+            }
+        }
         [Route("Login")]
         [HttpPost]
         public async Task<IHttpActionResult> DoLogin(JObject body)
