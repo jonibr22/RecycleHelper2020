@@ -63,6 +63,13 @@
     <Build Include="User_GetByUsername.sql" />
     <Build Include="User_InsertUpdate.sql" />
     <Build Include="User_GetById.sql" />
+    <Build Include="trPanduan.sql" />
+    <Build Include="Bahan_GetAllBahan.sql" />
+    <Build Include="Bahan_InsertUpdate.sql" />
+    <Build Include="msBahan.sql" />
+    <Build Include="Panduan_GetAllPanduan.sql" />
+    <Build Include="Panduan_InsertUpdate.sql" />
+    <Build Include="Bahan_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="RecycleHelperDatabase.publish.xml" />

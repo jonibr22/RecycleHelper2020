@@ -13,6 +13,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
     public interface IBahanApiService
     {
         Task<List<Bahan>> GetAllBahan();
+        Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
     }
     public class BahanApiService : IBahanApiService
@@ -24,8 +25,14 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         }
         public async Task<List<Bahan>> GetAllBahan()
         {
-          
             return (await bahanRepository.ExecSPToListAsync("Bahan_GetAllBahan")).ToList();
+        }
+        public async Task<Bahan> GetById(int id)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@Id", id)
+            };
+            return await bahanRepository.ExecSPToSingleAsync("Bahan_GetById @Id ", Param);
         }
         public async Task<ExecuteResult> InsertUpdate(Bahan bahan)
         {

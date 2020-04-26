@@ -21,14 +21,14 @@ namespace RecycleHelperApplication.WebAPI.Controllers
             this.BahanHandler = BahanHandler;
         }
         [Route("GetAllBahan")]
-        [HttpPost]
+        [HttpGet]
         public async Task<IHttpActionResult> GetAllBahan()
         {
             try
             {
                 return Json(await BahanHandler.GetAllBahan());
             }
-            catch (UnauthorizedException e)
+            catch (NotFoundException e)
             {
                 return Json(APIError.From(e));
             }
@@ -37,6 +37,39 @@ namespace RecycleHelperApplication.WebAPI.Controllers
                 return Json(APIError.From(e));
             }
         }
-      
+        [Route("Insert")]
+        [HttpPost]
+        public async Task<IHttpActionResult> Insert(JObject body)
+        {
+            try
+            {
+                return Json(await BahanHandler.Insert(body));
+            }
+            catch (NotPermittedException e)
+            {
+                return Json(APIError.From(e));
+            }
+            catch (InternalServerErrorException e)
+            {
+                return Json(APIError.From(e));
+            }
+        }
+        [Route("Update")]
+        [HttpPut]
+        public async Task<IHttpActionResult> Update(JObject body)
+        {
+            try
+            {
+                return Json(await BahanHandler.Update(body));
+            }
+            catch (NotFoundException e)
+            {
+                return Json(APIError.From(e));
+            }
+            catch (InternalServerErrorException e)
+            {
+                return Json(APIError.From(e));
+            }
+        }
     }
 }

@@ -22,6 +22,14 @@ namespace RecycleHelperApplication.WebAPI
             container.RegisterType<IUserRepository, UserRepository>();
             container.RegisterType<IUserApiService, UserApiService>();
             container.RegisterType<IUserHandler, UserHandler>();
+
+            container.RegisterType<IBahanRepository, BahanRepository>();
+            container.RegisterType<IBahanApiService, BahanApiService>();
+            container.RegisterType<IBahanHandler, BahanHandler>();
+
+            container.RegisterType<IPanduanRepository, PanduanRepository>();
+            container.RegisterType<IPanduanApiService, PanduanApiService>();
+
             return container;
         }
     }

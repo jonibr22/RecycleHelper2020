@@ -14,9 +14,9 @@ namespace RecycleHelperApplication.Controllers
             return View();
         }
 
-        public ActionResult GetAllBahan()
-        {
+        //public ActionResult GetAllBahan()
+        //{
 
-        }
+        //}
     }
 }

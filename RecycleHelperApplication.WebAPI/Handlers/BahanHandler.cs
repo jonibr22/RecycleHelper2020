@@ -14,6 +14,8 @@ namespace RecycleHelperApplication.WebAPI.Handlers
     public interface IBahanHandler
     {
         Task<object> GetAllBahan();
+        Task<object> Insert(JObject body);
+        Task<object> Update(JObject body);
     }
     public class BahanHandler : IBahanHandler
     {
@@ -31,15 +33,15 @@ namespace RecycleHelperApplication.WebAPI.Handlers
 
                 if (BahanResponse == null)
                 {
-                    throw new UnauthorizedException("Bahan tidak ada");
+                    throw new NotFoundException("Bahan tidak ada");
                 }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
-                    ReturnValue = BahanResponse
+                    ListBahan = BahanResponse
                 };
             }
-            catch (UnauthorizedException e)
+            catch (NotFoundException e)
             {
                 throw e;
             }
@@ -48,6 +50,60 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 throw new InternalServerErrorException(e.Message);
             }
         }
-       
+        public async Task<object> Insert(JObject body)
+        {
+            try
+            {
+                Bahan bahanRequest = body.Value<JObject>("Bahan").ToObject<Bahan>();
+                List<Bahan> listAllBahan  = await BahanService.GetAllBahan();
+                if(listAllBahan.Any(x => x.NamaBahan.ToLower().Trim() == bahanRequest.NamaBahan.ToLower().Trim()))
+                {
+                    throw new NotPermittedException("Nama bahan yang sama sudah tersedia");
+                }
+                ExecuteResult result = await BahanService.InsertUpdate(bahanRequest);
+
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch (NotPermittedException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> Update(JObject body)
+        {
+            try
+            {
+                Bahan bahanRequest = body.Value<JObject>("Bahan").ToObject<Bahan>();
+                Bahan bahanResponse = await BahanService.GetById(bahanRequest.IdBahan);
+
+                if (bahanResponse == null)
+                {
+                    throw new NotFoundException("Bahan dengan ID tersebut tidak ditemukan");
+                }
+                ExecuteResult result = await BahanService.InsertUpdate(bahanRequest);
+
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch (NotFoundException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
     }
 }
