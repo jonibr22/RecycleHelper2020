@@ -10,15 +10,6 @@
             color: red
         }
     </style>
-</head>
-<body onload="stopLoaderScreen()">
-    <div id="loaderScreen">
-
-    </div>
-    <div>
-        @RenderBody()
-    </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
@@ -27,12 +18,19 @@
     @Scripts.Render("~/Content/custom")
     @Styles.Render("~/Content/loader/loader.css")
     @Scripts.Render("~/Content/loader/loader.js")
+</head>
+<body onload="stopLoaderScreen()">
+    <div id="loaderScreen">
+
+    </div>
+    <div>
+        @RenderBody()
+    </div>
     <!-- Partial View Alert Message -->
     @if (TempData["ListAlert"] != null)
     {
         @Html.Partial("_AlertMessage", TempData["ListAlert"])
     }
-    
 </body>
 </html>
 <script>

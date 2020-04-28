@@ -12,6 +12,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 {
     public interface IUserApiService
     {
+        Task<List<User>> GetAllUser();
         Task<User> GetById(int id);
         Task<User> GetByUsername(string username);
         Task<ExecuteResult> InsertUpdate(User user);
@@ -23,12 +24,16 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         {
             this.userRepository = userRepository;
         }
+        public async Task<List<User>> GetAllUser()
+        {
+            return (await userRepository.ExecSPToListAsync("User_GetAllUser ")).ToList();
+        }
         public async Task<User> GetById(int id)
         {
             var Param = new SqlParameter[] {
-                new SqlParameter("@Id", id)
+                new SqlParameter("@IdUser", id)
             };
-            return await userRepository.ExecSPToSingleAsync("User_GetById @Id ", Param);
+            return await userRepository.ExecSPToSingleAsync("User_GetById @IdUser ", Param);
         }
         public async Task<User> GetByUsername(string username)
         {
@@ -44,14 +49,14 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             Data.Add(new StoredProcedure
             {
-                SPName = "User_InsertUpdate @Id, @Username, @Password, @Name, @RoleId ",
+                SPName = "User_InsertUpdate @IdUser, @Username, @Password, @Name, @IdRole ",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@Id", user.Id),
+                    new SqlParameter("@IdUser", user.IdUser),
                     new SqlParameter("@Username", user.Username),
                     new SqlParameter("@Password", user.Password),
                     new SqlParameter("@Name", user.Name),
-                    new SqlParameter("@RoleId", user.RoleId)
+                    new SqlParameter("@IdRole", user.IdRole)
                 }
             });
 

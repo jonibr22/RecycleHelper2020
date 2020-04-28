@@ -80,16 +80,23 @@
     <Compile Include="Helper\APIHelper\APIException.cs" />
     <Compile Include="Helper\APIHelper\APIResult.cs" />
     <Compile Include="Helper\APIHelper\PropertyGetter.cs" />
+    <Compile Include="Helper\DropdownHelper.cs" />
     <Compile Include="Helper\EncryptedActionParameterAttribute.cs" />
     <Compile Include="Helper\ModelSQLParamService.cs" />
     <Compile Include="Helper\MyExtensions.cs" />
     <Compile Include="Helper\ReflectionExtensions.cs" />
     <Compile Include="Helper\SessionEnum.cs" />
     <Compile Include="Helper\Util.cs" />
+    <Compile Include="Modules\WebAPI\DetailPanduanApiService.cs" />
+    <Compile Include="Modules\WebAPI\KategoriBahanApiService.cs" />
     <Compile Include="Modules\WebAPI\PanduanApiService.cs" />
     <Compile Include="Modules\WebAPI\BahanApiService.cs" />
+    <Compile Include="Modules\WebAPI\RoleApiService.cs" />
     <Compile Include="Modules\WebAPI\UserApiService.cs" />
     <Compile Include="Modules\Web\AuthService.cs" />
+    <Compile Include="Modules\Web\BahanService.cs" />
+    <Compile Include="Modules\Web\PanduanService.cs" />
+    <Compile Include="Modules\Web\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,10 +5,10 @@
  */
 
 CREATE PROCEDURE [dbo].[User_GetById]
-	@Id INT
+	@IdUser INT
 AS
 BEGIN
-	SELECT [Id],[Name],[Username],[Password],[RoleId]
+	SELECT [IdUser],[Name],[Username],[Password],[IdRole]
 	FROM msUser
-	WHERE Id = @Id
+	WHERE IdUser = @IdUser
 END

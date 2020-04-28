@@ -13,6 +13,8 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
     public interface IBahanApiService
     {
         Task<List<Bahan>> GetAllBahan();
+        Task<List<Bahan>> GetListByKategori(int idKategori);
+        Task<List<Bahan>> GetListByPanduan(int idPanduan);
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
     }
@@ -27,12 +29,26 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         {
             return (await bahanRepository.ExecSPToListAsync("Bahan_GetAllBahan")).ToList();
         }
+        public async Task<List<Bahan>> GetListByKategori(int idKategori)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@IdKategori", idKategori)
+            };
+            return (await bahanRepository.ExecSPToListAsync("Bahan_GetListByKategori @IdKategori ", Param)).ToList();
+        }
+        public async Task<List<Bahan>> GetListByPanduan(int idPanduan)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@IdPanduan", idPanduan)
+            };
+            return (await bahanRepository.ExecSPToListAsync("Bahan_GetListByPanduan @IdPanduan ", Param)).ToList();
+        }
         public async Task<Bahan> GetById(int id)
         {
             var Param = new SqlParameter[] {
-                new SqlParameter("@Id", id)
+                new SqlParameter("@IdBahan", id)
             };
-            return await bahanRepository.ExecSPToSingleAsync("Bahan_GetById @Id ", Param);
+            return await bahanRepository.ExecSPToSingleAsync("Bahan_GetById @IdBahan ", Param);
         }
         public async Task<ExecuteResult> InsertUpdate(Bahan bahan)
         {
@@ -41,11 +57,12 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             Data.Add(new StoredProcedure
             {
-                SPName = "Bahan_InsertUpdate @IdBahan, @NamaBahan",
+                SPName = "Bahan_InsertUpdate @IdBahan, @NamaBahan, @IdKategoriBahan",
                 SQLParam = new SqlParameter[]
                 {
                     new SqlParameter("@IdBahan", bahan.IdBahan),
-                    new SqlParameter("@NamaBahan", bahan.NamaBahan)
+                    new SqlParameter("@NamaBahan", bahan.NamaBahan),
+                    new SqlParameter("@IdKategoriBahan", bahan.IdKategoriBahan)
                 }
             });
 

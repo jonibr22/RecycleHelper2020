@@ -62,7 +62,7 @@ namespace RecycleHelperApplication.Controllers.Auth
                     Username = registrationViewModel.Username,
                     Password = registrationViewModel.Password,
                     Name = registrationViewModel.Name,
-                    RoleId = 1
+                    IdRole = 1
                 });
                 return RedirectToAction("Index", "Auth");
             }

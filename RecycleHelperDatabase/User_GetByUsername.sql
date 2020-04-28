@@ -5,10 +5,10 @@
  */
 
 CREATE PROCEDURE [dbo].[User_GetByUsername]
-	@Username VARCHAR(MAX) = NULL
+	@Username VARCHAR(MAX)
 AS
 BEGIN
-	SELECT [Id],[Username],[Password],[Name],[RoleId]
+	SELECT [IdUser],[Username],[Password],[Name],[IdRole]
 	FROM msUser
 	WHERE Username = @Username
 END

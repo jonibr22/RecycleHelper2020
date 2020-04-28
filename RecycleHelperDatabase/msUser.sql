@@ -1,8 +1,9 @@
 ﻿CREATE TABLE [dbo].[msUser]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+	[IdUser] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
     [Username] VARCHAR(MAX) NOT NULL, 
     [Password] VARCHAR(MAX) NOT NULL, 
-    [RoleId] INT NOT NULL DEFAULT 1, 
+    [IdRole] INT NOT NULL, 
     [Name] VARCHAR(MAX) NOT NULL
+	FOREIGN KEY (IdRole) REFERENCES msRole(IdRole)
 )

@@ -5,10 +5,10 @@
  */
 
 CREATE PROCEDURE [dbo].[Bahan_GetById]
-	@Id INT
+	@IdBahan INT
 AS
 BEGIN
-	SELECT IdBahan, NamaBahan
+	SELECT IdBahan, NamaBahan, IdKategoriBahan
 	FROM msBahan
-	WHERE IdBahan = @Id
+	WHERE IdBahan = @IdBahan
 END

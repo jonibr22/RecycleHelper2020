@@ -4,29 +4,29 @@
  *	Purpose: Insert atau Update User
  */
 CREATE PROCEDURE [dbo].[User_InsertUpdate]
-	@Id INT,
+	@IdUser INT,
 	@Username VARCHAR(MAX),
 	@Password VARCHAR(MAX),
 	@Name VARCHAR(MAX),
-	@RoleId INT
+	@IdRole INT
 AS
 BEGIN
 	DECLARE @RetVal INT
-	IF(EXISTS(SELECT 1 FROM msUser WHERE Id = @Id))
+	IF(EXISTS(SELECT 1 FROM msUser WHERE IdUser = @IdUser))
 	BEGIN
 		UPDATE msUser
 		SET [Username] = @Username,
 			[Name] = @Name,
 			[Password] = @Password,
-			[RoleId] = @RoleId
-		WHERE Id = @Id
+			[IdRole] = @IdRole
+		WHERE IdUser = @IdUser
 
-		SET @RetVal = @Id
+		SET @RetVal = @IdUser
 	END
 	ELSE
 	BEGIN
-		INSERT INTO msUser([Username],[Password],[Name],[RoleId])
-		VALUES (@Username,@Password,@Name,@RoleId)
+		INSERT INTO msUser([Username],[Password],[Name],[IdRole])
+		VALUES (@Username,@Password,@Name,@IdRole)
 
 		SET @RetVal = SCOPE_IDENTITY()
 	END

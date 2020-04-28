@@ -1,8 +1,158 @@
-﻿
+﻿@model RecycleHelperApplication.ViewModels.Home.IndexViewModel
+@using Microsoft.Web.Mvc;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SelectListItem> ListKategoriBahan = Model.ListKategoriBahan;
+    List<SelectListItem> ListBahan = Model.ListBahan;
+    var ListUser = Model.ListUser;
+    List<string> ListSelectedBahanId = (!String.IsNullOrEmpty(Model.SelectedBahanIds))?Model.SelectedBahanIds.Split(',').ToList():new List<string>();
 }
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<style>
+    .f1{
+        width: 50%;
+        display: inline-block;
+        background-color: dimgrey;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    .float-container {
+	    max-width: 1460px;
+	    margin: auto;
+    }
 
-<h2>Homepage</h2>
+    .float-child1 {
+	    display: inline-block;
+	    width: 30%;
+	    min-width: 350px;
+	    padding: 0;
+	    margin: 0;
+	    position: relative;
+        padding: 10px;
+    }  
+    .float-child2 {
+	    width: 65%;
+	    min-width: 350px;
+	    display: inline-block;
+	    vertical-align: top;
+	    padding: 15px 0;
+        padding: 10px;
+    }  
+</style>
+<h2>Define your Ingredients</h2>
+<div class="float-container">
+    <div class="float-child1">
+        @using (Html.BeginForm("_ListingBahan", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "form_listing_bahan" }))
+        {
+            @Html.HiddenFor(model => model.SelectedBahanIds, new { Value = Model.SelectedBahanIds })
+            <div class="form-group">
+                <div class="control-label">
+                    <b>Category<span class="red-text">*</span></b>
+                </div>
+                @Html.DropDownListFor(model => model.IdKategoriBahan,
+            new SelectList(ListKategoriBahan, "Value", "Text"),
+            new
+            {
+                @class = "input-sm form-control",
+                @id = "ddlKategoriBahan",
+                @onchange = "ddlKategoriBahanChange(this.value)"
+            })
+                <span class="red-text">
+                    @Html.ValidationMessageFor(model => model.IdKategoriBahan)
+                </span>
+            </div>
+            <div class="form-group">
+                <div class="control-label">
+                    <b>Bahan<span class="red-text">*</span></b>
+                </div>
+                @Html.DropDownListFor(model => model.IdBahan,
+            new SelectList(ListBahan, "Value", "Text"),
+            new
+            {
+                @class = "input-sm form-control",
+                @id = "ddlBahan"
+            })
+                <span class="red-text">
+                    @Html.ValidationMessageFor(model => model.IdBahan)
+                </span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add!" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+    <div class="float-child2">
+        <table id="tbl_listing">
+            <thead>
+                <th>Selected Bahan</th>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ListSelectedBahanId.Count; i++)
+                {
+                    string id = ListSelectedBahanId[i];
+                    if (id != "0")
+                    {
+                        <tr>
+                            <td>@ListBahan.FirstOrDefault(x => x.Value == id).Text</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+</div>
+<hr />
+<h2>Search Result</h2>
+<div id="dt_search_result">
+    <table id="tbl_search">
+        <thead>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Author</th>
+        <th>Toggle</th>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.SearchResult)
+            {
+                <tr>
+                    <td>@item.NamaPanduan</td>
+                    <td>@item.DeskripsiPanduan</td>
+                    <td>@ListUser.FirstOrDefault(x => x.IdUser == item.IdUser).Name</td>
+                    <td><button class="btn btn-danger">Find Out</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#ddlKategoriBahan').trigger('change')
+        $('#tbl_listing').DataTable()
+        $('#tbl_search').DataTable()
+    })
+    function ddlKategoriBahanChange(IDKategoriBahan) {
+        var data = {
+            IDKategoriBahan: IDKategoriBahan
+        }
+        $.ajax({
+            url: location.origin + "/AjaxData/GetListBahanByKategori",
+            type: 'POST',
+            async: false,
+            data: data,
+            success: function (res) {
+                $('#ddlBahan').empty();
 
+                $.each(res, function (index, paroki) {
+                    $('#ddlBahan').append($('<option/>', {
+                        value: paroki.Value, text: paroki.Text
+                    }));
+                });
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+</script>

@@ -70,8 +70,30 @@
     <Build Include="Panduan_GetAllPanduan.sql" />
     <Build Include="Panduan_InsertUpdate.sql" />
     <Build Include="Bahan_GetById.sql" />
+    <Build Include="msKategoriBahan.sql" />
+    <Build Include="KategoriBahan_GetAllKategoriBahan.sql" />
+    <Build Include="Bahan_GetListByKategori.sql" />
+    <Build Include="trDetailPanduan.sql" />
+    <Build Include="msRole.sql" />
+    <Build Include="KategoriBahan_InsertUpdate.sql" />
+    <Build Include="KategoriBahan_GetById.sql" />
+    <Build Include="Role_GetById.sql" />
+    <Build Include="Role_InsertUpdate.sql" />
+    <Build Include="Role_GetAllRole.sql" />
+    <Build Include="Panduan_GetById.sql" />
+    <Build Include="Panduan_GetListByUser.sql" />
+    <Build Include="User_GetAllUser.sql" />
+    <Build Include="Panduan_GetListByMultipleBahan.sql" />
+    <Build Include="fn_General_Split.sql" />
+    <Build Include="Bahan_GetListByPanduan.sql" />
+    <Build Include="DetailPanduan_Insert.sql" />
+    <Build Include="DetailPanduan_Delete.sql" />
+    <Build Include="DetailPanduan_GetWithParam.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="RecycleHelperDatabase.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="RecycleHelperDatabase.refactorlog" />
   </ItemGroup>
 </Project>
