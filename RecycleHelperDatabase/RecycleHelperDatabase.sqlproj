@@ -89,6 +89,7 @@
     <Build Include="DetailPanduan_Insert.sql" />
     <Build Include="DetailPanduan_Delete.sql" />
     <Build Include="DetailPanduan_GetWithParam.sql" />
+    <Build Include="Bahan_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="RecycleHelperDatabase.publish.xml" />
