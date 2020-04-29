@@ -21,5 +21,7 @@ namespace RecycleHelperApplication.ViewModels.Home
 
         public List<Panduan> SearchResult { get; set; }
         public List<User> ListUser { get; set; }
+
+        public int FromRemoveBahan { get; set; }
     }
 }

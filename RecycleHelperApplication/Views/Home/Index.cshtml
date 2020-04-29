@@ -42,9 +42,10 @@
 <h2>Define your Ingredients</h2>
 <div class="float-container">
     <div class="float-child1">
-        @using (Html.BeginForm("_ListingBahan", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "form_listing_bahan" }))
+        @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "form_listing_search" }))
         {
-            @Html.HiddenFor(model => model.SelectedBahanIds, new { Value = Model.SelectedBahanIds })
+            @Html.HiddenFor(model => model.SelectedBahanIds, new { Id = "selected_bahan", Value = Model.SelectedBahanIds })
+            @Html.HiddenFor(model => model.FromRemoveBahan, new { Id = "from_remove", Value = Model.FromRemoveBahan})
             <div class="form-group">
                 <div class="control-label">
                     <b>Category<span class="red-text">*</span></b>
@@ -84,7 +85,8 @@
     <div class="float-child2">
         <table id="tbl_listing">
             <thead>
-                <th>Selected Bahan</th>
+                <th width="80%">Selected Bahan</th>
+                <th width="20%" class="no-sort"></th>
             </thead>
             <tbody>
                 @for (int i = 0; i < ListSelectedBahanId.Count; i++)
@@ -93,7 +95,8 @@
                     if (id != "0")
                     {
                         <tr>
-                            <td>@ListBahan.FirstOrDefault(x => x.Value == id).Text</td>
+                            <td width="80%">@ListBahan.FirstOrDefault(x => x.Value == id).Text</td>
+                            <td width="20%"><button onclick="removeListedBahan('@id')" class="btn btn-block"><img src="~/Content/images/red_x.png" style="width:16px;height:16px;"> <b style="color:red">Remove</b></button></td>
                         </tr>
                     }
                 }
@@ -109,7 +112,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Author</th>
-        <th>Toggle</th>
+        <th class="no-sort">Toggle</th>
         </thead>
         <tbody>
             @foreach (var item in Model.SearchResult)
@@ -118,7 +121,7 @@
                     <td>@item.NamaPanduan</td>
                     <td>@item.DeskripsiPanduan</td>
                     <td>@ListUser.FirstOrDefault(x => x.IdUser == item.IdUser).Name</td>
-                    <td><button class="btn btn-danger">Find Out</button></td>
+                    <td><i class="btn btn-danger" >Find Out</i></td>
                 </tr>
             }
         </tbody>
@@ -127,9 +130,31 @@
 <script>
     $(document).ready(function () {
         $('#ddlKategoriBahan').trigger('change')
-        $('#tbl_listing').DataTable()
-        $('#tbl_search').DataTable()
+        $('#tbl_listing').DataTable({
+            columnDefs: [
+                { targets: 'no-sort', orderable: false }
+            ]
+        })
+        $('#tbl_search').DataTable({
+            columnDefs: [
+                { targets: 'no-sort', orderable: false }
+            ]
+        })
     })
+    function removeListedBahan(IDBahan){
+        var selectedBahan = $('#selected_bahan').val()
+        var splitted = selectedBahan.split(',')
+        var newSelectedBahan = []
+        for(var i=0;i<splitted.length;i++){
+            if(splitted[i] != IDBahan){
+                newSelectedBahan.push(splitted[i])
+            }
+        }
+        var joinedNewSelectedBahan = newSelectedBahan.join(',')
+        $('#selected_bahan').val(joinedNewSelectedBahan)
+        $('#from_remove').val(1)
+        $('#form_listing_search').submit()
+    }
     function ddlKategoriBahanChange(IDKategoriBahan) {
         var data = {
             IDKategoriBahan: IDKategoriBahan

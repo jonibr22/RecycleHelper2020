@@ -229,6 +229,12 @@
     <Content Include="Content\datatables\jquery.dataTables.js" />
     <Content Include="Content\growl\jquery.growl.css" />
     <Content Include="Content\growl\jquery.growl.js" />
+    <Content Include="Content\images\red_x.png" />
+    <Content Include="Content\images\sort_asc.png" />
+    <Content Include="Content\images\sort_asc_disabled.png" />
+    <Content Include="Content\images\sort_both.png" />
+    <Content Include="Content\images\sort_desc.png" />
+    <Content Include="Content\images\sort_desc_disabled.png" />
     <Content Include="Content\loader\loader.css" />
     <Content Include="Content\loader\loader.js" />
     <Content Include="Content\scripts\customjs.js" />
