@@ -46,14 +46,16 @@ namespace RecycleHelperApplication.Controllers
             await SetDropdownIndex(indexViewModel);
             return View(indexViewModel);
         }
-        public async Task<ActionResult> _ListingBahan(IndexViewModel indexViewModel)
+        public async Task<ActionResult> Search(IndexViewModel indexViewModel)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid && indexViewModel.FromRemoveBahan == 0)
             {
                 await GetSearchResult(indexViewModel);
                 await SetDropdownIndex(indexViewModel);
                 return View("Index", indexViewModel);
             }
+            ModelState.Clear();
+            indexViewModel.FromRemoveBahan = 0;
             string selectedBahan = indexViewModel.SelectedBahanIds;
             selectedBahan += "," + indexViewModel.IdBahan.ToString();
             //remove duplicate
