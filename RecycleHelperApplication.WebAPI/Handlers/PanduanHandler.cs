@@ -20,6 +20,7 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         Task<object> Insert(JObject body);
         Task<object> Update(JObject body);
         Task<object> Delete(int id);
+        Task<object> DeleteMultiple(string ids);
     }
     public class PanduanHandler : IPanduanHandler
     {
@@ -170,6 +171,26 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 throw e;
             }
             catch(Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> DeleteMultiple(string ids)
+        {
+            try
+            {
+                ExecuteResult result = await panduanService.DeleteMultiple(ids);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch (Exception e)
             {
                 throw new InternalServerErrorException(e.Message);
             }
