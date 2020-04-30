@@ -1,9 +1,26 @@
 ﻿@model RecycleHelperApplication.ViewModels.KategoriBahanViewModels.KategoriBahanTableViewModel
+<div style="margin-bottom: 10px">
+    <div style="display: inline;">
+        <h2 style="display: inline;">List Kategori Bahan</h2>
+    </div>
+    <div style="display: inline;" class="pull-right">
+        @using (Html.BeginForm("Delete", "KategoriBahan", FormMethod.Post, new { id = "form_delete", @class = "pull-right", @style = "padding: 0 5px;" }))
+        {
+            @Html.Hidden("hddSelectedIds")
+            <input type="button" value="Delete" class="btn btn-danger" id="btnDelete" />
+        }
+        @using (Html.BeginForm("Add", "KategoriBahan", FormMethod.Post, new { id = "form_add", @class = "pull-right", @style = "padding: 0 5px;" }))
+        {
+            <input type="submit" value="Add" class="btn btn-primary" id="btnAdd" />
+        }
+    </div>
+</div>
 <table id="categories-datatable">
     <thead>
         <tr>
             <th></th>
-            <th width="80%">Nama</th>
+            <th width="5%"></th>
+            <th width="75%">Nama</th>
             <th width="20%">Toggle</th>
         </tr>
     </thead>
@@ -12,8 +29,13 @@
         {
             <tr>
                 <td>@a.IdKategoriBahan</td>
+                <td>
+                <div style="text-align: center;">
+                    <span class="chkPilih">@Html.CheckBox("cbx_kategoribahan" + a.IdKategoriBahan, false, new { value = a.IdKategoriBahan })</span>
+                </div>
+                </td>
                 <td>@a.NamaKategoriBahan</td>
-                <td><button class='btn btn-secondary btnEdit'>Edit</button></td>
+                <td><button class='btn btn-secondary btnEdit' type="button">Edit</button></td>
             </tr>
         }
     </tbody>
@@ -23,8 +45,14 @@
         order: [[0, "asc"]],
         columnDefs: [
             { visible: false, targets: [0] },
-            { orderable: true, targets: [1] }
-        ]
+            { orderable: false, targets: [1] },
+            { orderable: true, targets: [2] },
+            { orderable: false, targets: [3] }
+        ],
+        responsive: true,
+        autoWidth: false,
+        scrollX: false,
+        fixedHeader: true
     });
 
     $('#categories-datatable tbody').on('click', '.btnEdit', function () {
@@ -40,13 +68,49 @@
                     startLoaderScreen();
                 },
                 success: function (data) {
+                    $('#form_kategoribahan').show();
                     $('#idkategoribahan_field').val(data.id);
                     $('#namakategoribahan_field').val(data.name);
                 },
                 error: function (e) {
-                    console.log(e);
+                    showAlert('error', e);
                 }
             })
+        }
+    });
+    $('#categories-datatable tbody').on('change', 'td', function (event) {
+        var deletedList = [];
+        var value = $(this).find('input').attr('value');
+        if ($('#hddSelectedIds').val()) {
+            deletedList = $('#hddSelectedIds').val().split(',');
+        }
+
+        if ($(this).find('input').is(':checked')) {
+            deletedList.push(value);
+            $('#hddSelectedIds').val(deletedList.join(','));
+        }
+        else {
+            var index = deletedList.indexOf(value);
+            if (index >= 0)
+                deletedList.splice(index, 1);
+            $('#hddSelectedIds').val(deletedList.join(','));
+        }
+    });
+    $("#btnDelete").click(function () {
+        var jumlahHapusKategoriBahan = 0;
+        $('#categories-datatable').DataTable().rows().iterator('row', function (context, index) {
+            var node = $(this.row(index).node());
+            //untuk mengecek apakah ada kategori yang dipilih untuk dihapus
+            if (node.find("input")[0].checked) {
+                //parameter showAlert : tipe alert, pesan yang ingin ditampilkan, form yang ingin di submit ketika konfirmasi
+                jumlahHapusKategoriBahan++;
+            }
+        });
+        if (jumlahHapusKategoriBahan == 0) {
+            showAlert('error', 'Tidak ada data yang dipilih!');
+        }
+        else {
+            showAlert('confirmation', 'Apakah anda ingin menghapus data ini?', 'form_delete');
         }
     });
 </script>

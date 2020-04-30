@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+<div class="container" id="form_kategoribahan">
     <div class="row">
         <div class="col-lg-12">
             <h2>Form Kategori Bahan</h2>
@@ -31,7 +31,6 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            <h2>List Kategori Bahan</h2>
             <div id="container_list_kategori_bahan">
 
             </div>
@@ -43,4 +42,20 @@
         $('#container_list_kategori_bahan').load('@Url.Action("_KategoriBahanTable","KategoriBahan")')
     })
 </script>
+@if (TempData["viewForm"] == null)
+{
+    <script>
+        $(document).ready(function () {
+            $('#form_kategoribahan').hide();
+        })
+    </script>
+}
+else
+{
+    <script>
+        $(document).ready(function () {
+            $('#form_kategoribahan').show();
+        })
+    </script>
+}
 

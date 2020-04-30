@@ -29,6 +29,7 @@ namespace RecycleHelperApplication.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["viewForm"] = 1;
                 return View("Index", indexViewModel);
             }
             try
@@ -81,6 +82,26 @@ namespace RecycleHelperApplication.Controllers
                 NamaKategoriBahan = kategoriBahan.NamaKategoriBahan;
             }
             return Json(new { id = IdKategoriBahan, name = NamaKategoriBahan });
+        }
+        public async Task<ActionResult> Add()
+        {
+            TempData["viewForm"] = 1;
+            return RedirectToAction("Index");
+        }
+        public async Task<ActionResult> Delete(string hddSelectedIds)
+        {
+            try
+            {
+                int result = await kategoriBahanService.Delete(hddSelectedIds);
+                ListAlert.Add(new AlertMessage("success", "Data berhasil dihapus"));
+                TempData["ListAlert"] = ListAlert;
+            }
+            catch(Exception e)
+            {
+                ListAlert.Add(new AlertMessage("error", e.Message));
+                TempData["ListAlert"] = ListAlert;
+            }
+            return RedirectToAction("Index");
         }
     }
 }
