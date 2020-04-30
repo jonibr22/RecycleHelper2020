@@ -241,6 +241,7 @@
     <Content Include="Content\loader\loader.css" />
     <Content Include="Content\loader\loader.js" />
     <Content Include="Content\scripts\customjs.js" />
+    <Content Include="Content\sweetalert\sweetalert.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
