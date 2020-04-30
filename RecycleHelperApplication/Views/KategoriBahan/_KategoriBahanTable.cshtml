@@ -1,0 +1,54 @@
+﻿@model RecycleHelperApplication.ViewModels.KategoriBahanViewModels.KategoriBahanTableViewModel
+<table id="categories-datatable">
+    <thead>
+        <tr>
+            <th></th>
+            <th width="80%">Nama</th>
+            <th width="20%">Toggle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model.ListKategoriBahan)
+        {
+            <tr>
+                <td>@a.IdKategoriBahan</td>
+                <td>@a.NamaKategoriBahan</td>
+                <td><button class='btn btn-secondary btnEdit'>Edit</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    var table = $("#categories-datatable").DataTable({
+        order: [[0, "asc"]],
+        columnDefs: [
+            { visible: false, targets: [0] },
+            { orderable: true, targets: [1] }
+        ]
+    });
+
+    $('#categories-datatable tbody').on('click', '.btnEdit', function () {
+        var data = table.row($(this).parents('tr')).data();
+        var IdKategoriBahan = data[0];
+        if (IdKategoriBahan !== undefined) {
+            var targetUrl = location.origin + '/KategoriBahan/SelectKategoriBahanToEdit';
+            $.ajax({
+                type: 'POST',
+                url: targetUrl,
+                data: { 'IdKategoriBahan': IdKategoriBahan },
+                beforeSend: function (e) {
+                    startLoaderScreen();
+                },
+                success: function (data) {
+                    $('#idkategoribahan_field').val(data.id);
+                    $('#namakategoribahan_field').val(data.name);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
+    });
+</script>
+
+
