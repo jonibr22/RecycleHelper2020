@@ -19,6 +19,7 @@ namespace RecycleHelperApplication.Service.Modules.Web
         Task<KategoriBahan> GetById(int id);
         Task<int> Insert(KategoriBahan kategoriBahan);
         Task<int> Update(KategoriBahan kategoriBahan);
+        Task<int> Delete(string ids);
     }
     public class KategoriBahanService : IKategoriBahanService
     {
@@ -96,6 +97,24 @@ namespace RecycleHelperApplication.Service.Modules.Web
                 string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
                 int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
                 return id;
+            }
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
+        }
+        public async Task<int> Delete(string ids)
+        {
+            HttpClient client = new APICall.HttpClientBuilder()
+               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
+               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
+               .Build();
+
+            var result = (await new APICall().Execute($"KategoriBahan/Multiple/{ids}", client, HttpMethod.Delete)).Data.ToString();
+            if (result.GetStatusCode() == 200)
+            {
+                JObject jObj = JObject.Parse(result);
+                string retvalStr = jObj.SelectToken("ReturnValue").ToString();
+                int retval = JsonConvert.DeserializeObject<int>(retvalStr);
+                return retval;
             }
             string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
             throw new Exception(errMsg);
