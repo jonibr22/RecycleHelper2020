@@ -99,7 +99,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
             {
                 Panduan panduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
                 ExecuteResult result = await panduanService.InsertUpdate(panduanRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -123,7 +126,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("Panduan dengan ID tersebut tidak ditemukan");
                 }
                 ExecuteResult result = await panduanService.InsertUpdate(panduanRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -149,6 +155,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("Panduan dengan ID tersebut tidak ditemukan");
                 }
                 ExecuteResult result = await panduanService.Delete(id);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,

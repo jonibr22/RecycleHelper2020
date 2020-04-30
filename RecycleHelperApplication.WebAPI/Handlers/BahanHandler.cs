@@ -107,7 +107,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Nama bahan yang sama sudah tersedia");
                 }
                 ExecuteResult result = await bahanService.InsertUpdate(bahanRequest);
-
+                if(result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -135,7 +138,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("Bahan dengan ID tersebut tidak ditemukan");
                 }
                 ExecuteResult result = await bahanService.InsertUpdate(bahanRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -162,6 +168,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("Bahan tidak ditemukan, tidak dapat delete");
                 }
                 ExecuteResult result = await bahanService.DeleteBahan(IdBahan);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -187,6 +197,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Masih terdapat panduan yang menggunakan bahan tersebut");
                 }
                 ExecuteResult result = await bahanService.DeleteMultiple(ids);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,

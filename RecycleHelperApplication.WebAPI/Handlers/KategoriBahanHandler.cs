@@ -72,7 +72,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Nama kategori bahan yang sama sudah tersedia");
                 }
                 ExecuteResult result = await kategoriBahanService.InsertUpdate(kategoriBahanRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -100,7 +103,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("Kategori Bahan dengan ID tersebut tidak ditemukan");
                 }
                 ExecuteResult result = await kategoriBahanService.InsertUpdate(kategoriBahanRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -126,6 +132,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Masih ada bahan yang memakai kategori tersebut");
                 }
                 ExecuteResult result = await kategoriBahanService.DeleteMultiple(ids);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,

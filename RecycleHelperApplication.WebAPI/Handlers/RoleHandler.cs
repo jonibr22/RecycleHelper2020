@@ -69,7 +69,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Nama role yang sama sudah tersedia");
                 }
                 ExecuteResult result = await roleService.InsertUpdate(roleRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -97,7 +100,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("Role dengan ID tersebut tidak ditemukan");
                 }
                 ExecuteResult result = await roleService.InsertUpdate(roleRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,

@@ -71,7 +71,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("User dengan ID tersebut tidak ditemukan");
                 }
                 ExecuteResult result = await userService.InsertUpdate(userRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -129,7 +132,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Username telah dipakai");
                 }
                 ExecuteResult result = await userService.InsertUpdate(userRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,

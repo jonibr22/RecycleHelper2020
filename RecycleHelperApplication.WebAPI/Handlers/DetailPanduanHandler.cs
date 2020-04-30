@@ -34,6 +34,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Data yang sama telah tercatat, tidak dapat insert");
                 }
                 ExecuteResult result = await detailPanduanService.Insert(detailPanduanRequest);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -60,6 +64,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotFoundException("Data tidak ditemukan, tidak dapat delete");
                 }
                 ExecuteResult result = await detailPanduanService.Delete(detailPanduanRequest);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
