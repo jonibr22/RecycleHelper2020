@@ -17,6 +17,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Panduan>> GetListByUser(int userId);
         Task<Panduan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Panduan Panduan);
+        Task<ExecuteResult> Delete(int id);
     }
     public class PanduanApiService : IPanduanApiService
     {
@@ -64,6 +65,31 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                     new SqlParameter("@NamaPanduan", Panduan.NamaPanduan),
                     new SqlParameter("@DeskripsiPanduan", Panduan.DeskripsiPanduan),
                     new SqlParameter("@IdUser", Panduan.IdUser),
+                }
+            });
+
+            ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
+            return ReturnValue;
+        }
+        public async Task<ExecuteResult> Delete(int id)
+        {
+            ExecuteResult ReturnValue = new ExecuteResult();
+            List<StoredProcedure> Data = new List<StoredProcedure>();
+
+            Data.Add(new StoredProcedure
+            {
+                SPName = "DetailPanduan_DeleteByPanduan @IdPanduan",
+                SQLParam = new SqlParameter[]
+                {
+                    new SqlParameter("@IdPanduan", id)
+                }
+            });
+            Data.Add(new StoredProcedure
+            {
+                SPName = "Panduan_Delete @IdPanduan",
+                SQLParam = new SqlParameter[]
+                {
+                    new SqlParameter("@IdPanduan", id)
                 }
             });
 

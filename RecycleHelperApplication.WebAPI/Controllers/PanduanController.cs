@@ -102,5 +102,22 @@ namespace RecycleHelperApplication.WebAPI.Controllers
                 return Json(APIError.From(e));
             }
         }
+        [Route("{id}")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete(int id)
+        {
+            try
+            {
+                return Json(await panduanHandler.Delete(id));
+            }
+            catch (NotFoundException e)
+            {
+                return Json(APIError.From(e));
+            }
+            catch (InternalServerErrorException e)
+            {
+                return Json(APIError.From(e));
+            }
+        }
     }
 }

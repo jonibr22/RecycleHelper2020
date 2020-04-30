@@ -15,6 +15,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<KategoriBahan>> GetAllKategoriBahan();
         Task<KategoriBahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(KategoriBahan kategoriBahan);
+        Task<ExecuteResult> DeleteMultiple(string ids);
     }
     public class KategoriBahanApiService : IKategoriBahanApiService
     {
@@ -46,6 +47,23 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 {
                     new SqlParameter("@IdKategoriBahan", kategoriBahan.IdKategoriBahan),
                     new SqlParameter("@NamaKategoriBahan", kategoriBahan.NamaKategoriBahan),
+                }
+            });
+
+            ReturnValue = await kategoriBahanRepository.ExecMultipleSPWithTransaction(Data);
+            return ReturnValue;
+        }
+        public async Task<ExecuteResult> DeleteMultiple(string ids)
+        {
+            ExecuteResult ReturnValue = new ExecuteResult();
+            List<StoredProcedure> Data = new List<StoredProcedure>();
+
+            Data.Add(new StoredProcedure
+            {
+                SPName = "KategoriBahan_DeleteMultiple @ListIdKategoriBahan",
+                SQLParam = new SqlParameter[]
+                {
+                    new SqlParameter("@ListIdKategoriBahan", ids)
                 }
             });
 

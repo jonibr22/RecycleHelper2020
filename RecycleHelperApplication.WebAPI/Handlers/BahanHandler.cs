@@ -19,14 +19,17 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         Task<object> GetListByPanduan(int idPanduan);
         Task<object> Insert(JObject body);
         Task<object> Update(JObject body);
+        Task<object> DeleteMultiple(string ids);
     }
     public class BahanHandler : IBahanHandler
     {
         private readonly IBahanApiService bahanService;
+        private readonly IPanduanApiService panduanService;
 
-        public BahanHandler(IBahanApiService bahanService)
+        public BahanHandler(IBahanApiService bahanService, IPanduanApiService panduanService)
         {
             this.bahanService = bahanService;
+            this.panduanService = panduanService;
         }
         public async Task<object> GetAllBahan()
         {
@@ -147,5 +150,30 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 throw new InternalServerErrorException(e.Message);
             }
         }
+        public async Task<object> DeleteMultiple(string ids)
+        {
+            try
+            {
+                List<Panduan> panduanList = await panduanService.GetListByMultipleBahan(ids);
+                if(panduanList != null && panduanList.Count > 0)
+                {
+                    throw new NotPermittedException("Masih terdapat panduan yang menggunakan bahan tersebut");
+                }
+                ExecuteResult result = await bahanService.DeleteMultiple(ids);
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch(NotPermittedException e)
+            {
+                throw e;
+            }
+            catch(Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        } 
     }
 }

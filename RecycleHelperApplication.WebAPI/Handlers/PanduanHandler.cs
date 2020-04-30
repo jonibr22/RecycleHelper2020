@@ -19,6 +19,7 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         Task<object> GetById(int id);
         Task<object> Insert(JObject body);
         Task<object> Update(JObject body);
+        Task<object> Delete(int id);
     }
     public class PanduanHandler : IPanduanHandler
     {
@@ -134,6 +135,31 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 throw e;
             }
             catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> Delete(int id)
+        {
+            try
+            {
+                Panduan panduan = await panduanService.GetById(id);
+                if(panduan == null)
+                {
+                    throw new NotFoundException("Panduan dengan ID tersebut tidak ditemukan");
+                }
+                ExecuteResult result = await panduanService.Delete(id);
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch(NotFoundException e)
+            {
+                throw e;
+            }
+            catch(Exception e)
             {
                 throw new InternalServerErrorException(e.Message);
             }

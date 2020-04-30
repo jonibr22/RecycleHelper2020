@@ -17,14 +17,17 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         Task<object> GetById(int id);
         Task<object> Insert(JObject body);
         Task<object> Update(JObject body);
+        Task<object> DeleteMultiple(string ids);
     }
     public class KategoriBahanHandler : IKategoriBahanHandler
     {
         private readonly IKategoriBahanApiService kategoriBahanService;
+        private readonly IBahanApiService bahanService;
 
-        public KategoriBahanHandler(IKategoriBahanApiService kategoriBahanService)
+        public KategoriBahanHandler(IKategoriBahanApiService kategoriBahanService,IBahanApiService bahanService)
         {
             this.kategoriBahanService = kategoriBahanService;
+            this.bahanService = bahanService;
         }
         public async Task<object> GetAllKategoriBahan()
         {
@@ -109,6 +112,31 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 throw e;
             }
             catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> DeleteMultiple(string ids)
+        {
+            try
+            {
+                List<Bahan> bahanList = await bahanService.GetListByMultipleKategori(ids);
+                if(bahanList != null && bahanList.Count > 0)
+                {
+                    throw new NotPermittedException("Masih ada bahan yang memakai kategori tersebut");
+                }
+                ExecuteResult result = await kategoriBahanService.DeleteMultiple(ids);
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch(NotPermittedException e)
+            {
+                throw e;
+            }
+            catch(Exception e)
             {
                 throw new InternalServerErrorException(e.Message);
             }

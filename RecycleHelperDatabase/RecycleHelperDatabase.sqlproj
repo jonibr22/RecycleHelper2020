@@ -89,6 +89,11 @@
     <Build Include="DetailPanduan_Insert.sql" />
     <Build Include="DetailPanduan_Delete.sql" />
     <Build Include="DetailPanduan_GetWithParam.sql" />
+    <Build Include="Bahan_DeleteMultiple.sql" />
+    <Build Include="KategoriBahan_DeleteMultiple.sql" />
+    <Build Include="Panduan_Delete.sql" />
+    <Build Include="Bahan_GetListByMultipleKategori.sql" />
+    <Build Include="DetailPanduan_DeleteByPanduan.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="RecycleHelperDatabase.publish.xml" />

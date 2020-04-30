@@ -14,9 +14,11 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
     {
         Task<List<Bahan>> GetAllBahan();
         Task<List<Bahan>> GetListByKategori(int idKategori);
+        Task<List<Bahan>> GetListByMultipleKategori(string idsKategori);
         Task<List<Bahan>> GetListByPanduan(int idPanduan);
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
+        Task<ExecuteResult> DeleteMultiple(string ids);
     }
     public class BahanApiService : IBahanApiService
     {
@@ -35,6 +37,13 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 new SqlParameter("@IdKategori", idKategori)
             };
             return (await bahanRepository.ExecSPToListAsync("Bahan_GetListByKategori @IdKategori ", Param)).ToList();
+        }
+        public async Task<List<Bahan>> GetListByMultipleKategori(string idsKategori)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@ListIdKategori", idsKategori)
+            };
+            return (await bahanRepository.ExecSPToListAsync("Bahan_GetListByMultipleKategori @ListIdKategori ", Param)).ToList();
         }
         public async Task<List<Bahan>> GetListByPanduan(int idPanduan)
         {
@@ -63,6 +72,23 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                     new SqlParameter("@IdBahan", bahan.IdBahan),
                     new SqlParameter("@NamaBahan", bahan.NamaBahan),
                     new SqlParameter("@IdKategoriBahan", bahan.IdKategoriBahan)
+                }
+            });
+
+            ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
+            return ReturnValue;
+        }
+        public async Task<ExecuteResult> DeleteMultiple(string ids)
+        {
+            ExecuteResult ReturnValue = new ExecuteResult();
+            List<StoredProcedure> Data = new List<StoredProcedure>();
+
+            Data.Add(new StoredProcedure
+            {
+                SPName = "Bahan_DeleteMultiple @ListIdBahan",
+                SQLParam = new SqlParameter[]
+                {
+                    new SqlParameter("@ListIdBahan", ids)
                 }
             });
 
