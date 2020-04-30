@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace RecycleHelperApplication.ViewModels.Home
+namespace RecycleHelperApplication.ViewModels.HomeViewModels
 {
     public class IndexViewModel
     {

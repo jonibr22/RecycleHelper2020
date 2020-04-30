@@ -2,7 +2,7 @@
 using RecycleHelperApplication.Model.Models;
 using RecycleHelperApplication.Service.Helper;
 using RecycleHelperApplication.Service.Modules.Web;
-using RecycleHelperApplication.ViewModels.Home;
+using RecycleHelperApplication.ViewModels.HomeViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿@model RecycleHelperApplication.ViewModels.Home.IndexViewModel
+﻿@model RecycleHelperApplication.ViewModels.HomeViewModels.IndexViewModel
 @using Microsoft.Web.Mvc;
 @{
     ViewBag.Title = "Index";
@@ -164,6 +164,9 @@
             type: 'POST',
             async: false,
             data: data,
+            beforeSend: function(e){
+                startLoaderScreen();
+            },
             success: function (res) {
                 $('#ddlBahan').empty();
 

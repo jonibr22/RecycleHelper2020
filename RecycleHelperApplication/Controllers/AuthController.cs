@@ -1,5 +1,5 @@
 ﻿using RecycleHelperApplication.Service.Modules.Web;
-using RecycleHelperApplication.ViewModels.Auth;
+using RecycleHelperApplication.ViewModels.AuthViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
