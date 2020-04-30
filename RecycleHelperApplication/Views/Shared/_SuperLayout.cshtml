@@ -40,10 +40,10 @@
         // SHOW LOADER - Form submit
         startLoaderScreen();
     });
-    $(document).ajaxStart(function () {
-        // SHOW LOADER - Ajax start
-        startLoaderScreen();
-    });
+    //$(document).ajaxStart(function () {
+    //    // SHOW LOADER - Ajax start
+    //    startLoaderScreen();
+    //});
     $(document).ajaxComplete(function (event, xhr) {
         // FADE OUT LOADER - Ajax success
         stopLoaderScreen();
