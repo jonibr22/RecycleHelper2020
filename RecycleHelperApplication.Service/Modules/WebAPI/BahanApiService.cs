@@ -18,6 +18,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Bahan>> GetListByPanduan(int idPanduan);
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
+        Task<ExecuteResult> DeleteBahan(int IdBahan);
         Task<ExecuteResult> DeleteMultiple(string ids);
     }
     public class BahanApiService : IBahanApiService
@@ -77,6 +78,25 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
+        }
+
+        public async Task<ExecuteResult> DeleteBahan(int IdBahan)
+        {
+            var Param = new SqlParameter[]
+            {
+                new SqlParameter("@IdBahan", IdBahan)
+            };
+
+            List<StoredProcedure> Data = new List<StoredProcedure>();
+            Data.Add(new StoredProcedure
+            {
+                SPName = "Bahan_Delete @IdBahan",
+                SQLParam = Param
+            });
+
+            ExecuteResult ResultValue = (await bahanRepository.ExecMultipleSPWithTransaction(Data));
+
+            return ResultValue;
         }
         public async Task<ExecuteResult> DeleteMultiple(string ids)
         {

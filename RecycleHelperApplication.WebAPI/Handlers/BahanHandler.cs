@@ -19,6 +19,7 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         Task<object> GetListByPanduan(int idPanduan);
         Task<object> Insert(JObject body);
         Task<object> Update(JObject body);
+        Task<object> DeleteBahan(int idBahan);
         Task<object> DeleteMultiple(string ids);
     }
     public class BahanHandler : IBahanHandler
@@ -135,6 +136,32 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 }
                 ExecuteResult result = await bahanService.InsertUpdate(bahanRequest);
 
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch (NotFoundException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+
+        public async Task<object> DeleteBahan(int IdBahan)
+        {
+            try
+            {
+                List<Bahan> BahanResponse = await bahanService.GetListByPanduan(IdBahan);
+                if (BahanResponse == null || (BahanResponse != null && BahanResponse.Count == 0))
+                {
+                    throw new NotFoundException("Bahan tidak ditemukan, tidak dapat delete");
+                }
+                ExecuteResult result = await bahanService.DeleteBahan(IdBahan);
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
