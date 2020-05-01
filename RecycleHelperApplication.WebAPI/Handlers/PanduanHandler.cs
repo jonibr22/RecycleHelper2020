@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
-using RecycleHelperApplication.Service.Modules.WebAPI;
 using RecycleHelperApplication.Service.Helper.APIHelper;
+using RecycleHelperApplication.Service.Modules.WebAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,37 +14,80 @@ namespace RecycleHelperApplication.WebAPI.Handlers
     public interface IPanduanHandler
     {
         Task<object> GetAllPanduan();
+        Task<object> GetListByMultipleBahan(string bahanIds);
+        Task<object> GetListByUser(int idUser);
+        Task<object> GetById(int id);
         Task<object> Insert(JObject body);
         Task<object> Update(JObject body);
-        Task<object> Delete(JObject body);
+        Task<object> Delete(int id);
+        Task<object> DeleteMultiple(string ids);
     }
     public class PanduanHandler : IPanduanHandler
     {
-        private readonly IPanduanApiService PanduanService;
+        private readonly IPanduanApiService panduanService;
 
-        public PanduanHandler(IPanduanApiService PanduanService)
+        public PanduanHandler(IPanduanApiService panduanService)
         {
-            this.PanduanService = PanduanService;
+            this.panduanService = panduanService;
         }
         public async Task<object> GetAllPanduan()
         {
             try
             {
-                List<Panduan> PanduanResponse = await PanduanService.GetAllPanduan();
-
-                if (PanduanResponse == null)
-                {
-                    throw new NotFoundException("Panduan tidak ada");
-                }
+                List<Panduan> panduanResponse = await panduanService.GetAllPanduan();
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
-                    ListPanduan = PanduanResponse
+                    ListPanduan = panduanResponse
                 };
             }
-            catch (NotFoundException e)
+            catch (Exception e)
             {
-                throw e;
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> GetListByMultipleBahan(string bahanIds)
+        {
+            try
+            {
+                List<Panduan> panduanResponse = await panduanService.GetListByMultipleBahan(bahanIds);
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ListPanduan = panduanResponse
+                };
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> GetListByUser(int userId)
+        {
+            try
+            {
+                List<Panduan> panduanResponse = await panduanService.GetListByUser(userId);
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ListPanduan = panduanResponse
+                };
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> GetById(int id)
+        {
+            try
+            {
+                Panduan panduan = await panduanService.GetById(id);
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    Panduan = panduan
+                };
             }
             catch (Exception e)
             {
@@ -55,23 +98,17 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         {
             try
             {
-                Panduan PanduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
-                List<Panduan> listAllPanduan  = await PanduanService.GetAllPanduan();
-                if(listAllPanduan.Any(x => x.NamaPanduan.ToLower().Trim() == PanduanRequest.NamaPanduan.ToLower().Trim()))
+                Panduan panduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
+                ExecuteResult result = await panduanService.InsertUpdate(panduanRequest);
+                if (result.ReturnVariable <= 0)
                 {
-                    throw new NotPermittedException("Nama Panduan yang sama sudah tersedia");
+                    throw new InternalServerErrorException("An error has occured");
                 }
-                ExecuteResult result = await PanduanService.InsertUpdate(PanduanRequest);
-
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
                     ReturnValue = result.ReturnVariable
                 };
-            }
-            catch (NotPermittedException e)
-            {
-                throw e;
             }
             catch (Exception e)
             {
@@ -82,15 +119,18 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         {
             try
             {
-                Panduan PanduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
-                Panduan PanduanResponse = await PanduanService.GetById(PanduanRequest.IdPanduan);
+                Panduan panduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
+                Panduan panduanResponse = await panduanService.GetById(panduanRequest.IdPanduan);
 
-                if (PanduanResponse == null)
+                if (panduanResponse == null)
                 {
                     throw new NotFoundException("Panduan dengan ID tersebut tidak ditemukan");
                 }
-                ExecuteResult result = await PanduanService.InsertUpdate(PanduanRequest);
-
+                ExecuteResult result = await panduanService.InsertUpdate(panduanRequest);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -106,28 +146,51 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 throw new InternalServerErrorException(e.Message);
             }
         }
-        public async Task<object> Delete(JObject body)
+        public async Task<object> Delete(int id)
         {
             try
             {
-                Panduan PanduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
-                Panduan PanduanResponse = await PanduanService.GetById(PanduanRequest.IdPanduan);
-
-                if (PanduanResponse == null)
+                Panduan panduan = await panduanService.GetById(id);
+                if(panduan == null)
                 {
                     throw new NotFoundException("Panduan dengan ID tersebut tidak ditemukan");
                 }
-                ExecuteResult result = await PanduanService.Delete(PanduanRequest);
-
+                ExecuteResult result = await panduanService.Delete(id);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
                     ReturnValue = result.ReturnVariable
                 };
-            } catch (NotFoundException e)
+            }
+            catch(NotFoundException e)
             {
                 throw e;
-            } catch (Exception e)
+            }
+            catch(Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
+        public async Task<object> DeleteMultiple(string ids)
+        {
+            try
+            {
+                ExecuteResult result = await panduanService.DeleteMultiple(ids);
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ReturnValue = result.ReturnVariable
+                };
+            }
+            catch (Exception e)
             {
                 throw new InternalServerErrorException(e.Message);
             }

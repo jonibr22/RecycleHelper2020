@@ -13,9 +13,13 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
     public interface IBahanApiService
     {
         Task<List<Bahan>> GetAllBahan();
+        Task<List<Bahan>> GetListByKategori(int idKategori);
+        Task<List<Bahan>> GetListByMultipleKategori(string idsKategori);
+        Task<List<Bahan>> GetListByPanduan(int idPanduan);
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
-        Task<ExecuteResult> Delete(Bahan bahan);
+        Task<ExecuteResult> DeleteBahan(int IdBahan);
+        Task<ExecuteResult> DeleteMultiple(string ids);
     }
     public class BahanApiService : IBahanApiService
     {
@@ -28,12 +32,33 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         {
             return (await bahanRepository.ExecSPToListAsync("Bahan_GetAllBahan")).ToList();
         }
+        public async Task<List<Bahan>> GetListByKategori(int idKategori)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@IdKategori", idKategori)
+            };
+            return (await bahanRepository.ExecSPToListAsync("Bahan_GetListByKategori @IdKategori ", Param)).ToList();
+        }
+        public async Task<List<Bahan>> GetListByMultipleKategori(string idsKategori)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@ListIdKategori", idsKategori)
+            };
+            return (await bahanRepository.ExecSPToListAsync("Bahan_GetListByMultipleKategori @ListIdKategori ", Param)).ToList();
+        }
+        public async Task<List<Bahan>> GetListByPanduan(int idPanduan)
+        {
+            var Param = new SqlParameter[] {
+                new SqlParameter("@IdPanduan", idPanduan)
+            };
+            return (await bahanRepository.ExecSPToListAsync("Bahan_GetListByPanduan @IdPanduan ", Param)).ToList();
+        }
         public async Task<Bahan> GetById(int id)
         {
             var Param = new SqlParameter[] {
-                new SqlParameter("@Id", id)
+                new SqlParameter("@IdBahan", id)
             };
-            return await bahanRepository.ExecSPToSingleAsync("Bahan_GetById @Id ", Param);
+            return await bahanRepository.ExecSPToSingleAsync("Bahan_GetById @IdBahan ", Param);
         }
         public async Task<ExecuteResult> InsertUpdate(Bahan bahan)
         {
@@ -42,27 +67,48 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             Data.Add(new StoredProcedure
             {
-                SPName = "Bahan_InsertUpdate @IdBahan, @NamaBahan",
+                SPName = "Bahan_InsertUpdate @IdBahan, @NamaBahan, @IdKategoriBahan",
                 SQLParam = new SqlParameter[]
                 {
                     new SqlParameter("@IdBahan", bahan.IdBahan),
-                    new SqlParameter("@NamaBahan", bahan.NamaBahan)
+                    new SqlParameter("@NamaBahan", bahan.NamaBahan),
+                    new SqlParameter("@IdKategoriBahan", bahan.IdKategoriBahan)
                 }
             });
 
             ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
-        public async Task<ExecuteResult> Delete(Bahan bahan)
+
+        public async Task<ExecuteResult> DeleteBahan(int IdBahan)
+        {
+            var Param = new SqlParameter[]
+            {
+                new SqlParameter("@IdBahan", IdBahan)
+            };
+
+            List<StoredProcedure> Data = new List<StoredProcedure>();
+            Data.Add(new StoredProcedure
+            {
+                SPName = "Bahan_Delete @IdBahan",
+                SQLParam = Param
+            });
+
+            ExecuteResult ResultValue = (await bahanRepository.ExecMultipleSPWithTransaction(Data));
+
+            return ResultValue;
+        }
+        public async Task<ExecuteResult> DeleteMultiple(string ids)
         {
             ExecuteResult ReturnValue = new ExecuteResult();
             List<StoredProcedure> Data = new List<StoredProcedure>();
 
-            Data.Add(new StoredProcedure {
-                SPName = "Bahan_Delete @IdBahan",
+            Data.Add(new StoredProcedure
+            {
+                SPName = "Bahan_DeleteMultiple @ListIdBahan",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@IdBahan", bahan.IdBahan)
+                    new SqlParameter("@ListIdBahan", ids)
                 }
             });
 

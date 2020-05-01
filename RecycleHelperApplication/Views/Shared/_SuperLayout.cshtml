@@ -10,15 +10,6 @@
             color: red
         }
     </style>
-</head>
-<body onload="stopLoaderScreen()">
-    <div id="loaderScreen">
-
-    </div>
-    <div>
-        @RenderBody()
-    </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
@@ -27,12 +18,22 @@
     @Scripts.Render("~/Content/custom")
     @Styles.Render("~/Content/loader/loader.css")
     @Scripts.Render("~/Content/loader/loader.js")
+    @Styles.Render("~/Content/datatables/jquery.dataTables.css")
+    @Scripts.Render("~/Content/datatables/jquery.dataTables.js")
+    @Scripts.Render("~/Content/sweetalert/sweetalert.min.js")
+</head>
+<body onload="stopLoaderScreen()">
+    <div id="loaderScreen">
+
+    </div>
+    <div>
+        @RenderBody()
+    </div>
     <!-- Partial View Alert Message -->
     @if (TempData["ListAlert"] != null)
     {
         @Html.Partial("_AlertMessage", TempData["ListAlert"])
     }
-    
 </body>
 </html>
 <script>
@@ -40,10 +41,10 @@
         // SHOW LOADER - Form submit
         startLoaderScreen();
     });
-    $(document).ajaxStart(function () {
-        // SHOW LOADER - Ajax start
-        startLoaderScreen();
-    });
+    //$(document).ajaxStart(function () {
+    //    // SHOW LOADER - Ajax start
+    //    startLoaderScreen();
+    //});
     $(document).ajaxComplete(function (event, xhr) {
         // FADE OUT LOADER - Ajax success
         stopLoaderScreen();

@@ -242,12 +242,20 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="BootStrapper.cs" />
     <Compile Include="Controllers\BahanController.cs" />
+    <Compile Include="Controllers\DetailPanduanController.cs" />
+    <Compile Include="Controllers\KategoriBahanController.cs" />
+    <Compile Include="Controllers\PanduanController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\PanduanHandler.cs" />
     <Compile Include="Handlers\BahanHandler.cs" />
+    <Compile Include="Handlers\DetailPanduanHandler.cs" />
+    <Compile Include="Handlers\KategoriBahanHandler.cs" />
+    <Compile Include="Handlers\PanduanHandler.cs" />
+    <Compile Include="Handlers\RoleHandler.cs" />
     <Compile Include="Handlers\UserHandler.cs" />
     <Compile Include="Models\APIResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

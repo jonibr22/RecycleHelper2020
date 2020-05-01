@@ -20,6 +20,19 @@ namespace RecycleHelperApplication.WebAPI.Controllers
         {
             this.userHandler = userHandler;
         }
+        [Route("")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllUser()
+        {
+            try
+            {
+                return Json(await userHandler.GetAllUser());
+            }
+            catch (InternalServerErrorException e)
+            {
+                return Json(APIError.From(e));
+            }
+        }
         [Route("{Id}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetById(int id)
@@ -27,10 +40,6 @@ namespace RecycleHelperApplication.WebAPI.Controllers
             try
             {
                 return Json(await userHandler.GetById(id));
-            }
-            catch (NotFoundException e)
-            {
-                return Json(APIError.From(e));
             }
             catch (InternalServerErrorException e)
             {

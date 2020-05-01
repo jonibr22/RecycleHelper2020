@@ -7,6 +7,6 @@
 CREATE PROCEDURE [dbo].[Bahan_GetAllBahan]
 AS
 BEGIN
-	SELECT [IdBahan],[NamaBahan]
+	SELECT [IdBahan],[NamaBahan],[IdKategoriBahan]
 	FROM msBahan
 END

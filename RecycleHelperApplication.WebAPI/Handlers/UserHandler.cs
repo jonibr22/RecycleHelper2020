@@ -13,6 +13,7 @@ namespace RecycleHelperApplication.WebAPI.Handlers
 {
     public interface IUserHandler
     {
+        Task<object> GetAllUser();
         Task<object> GetById(int id);
         Task<object> Edit(JObject body);
         Task<object> DoLogin(JObject body);
@@ -26,24 +27,32 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         {
             this.userService = userService;
         }
+        public async Task<object> GetAllUser()
+        {
+            try
+            {
+                List<User> UserResponse = await userService.GetAllUser();
+                return new
+                {
+                    Status = Models.APIResult.ResultSuccessStatus,
+                    ListUser = UserResponse
+                };
+            }
+            catch (Exception e)
+            {
+                throw new InternalServerErrorException(e.Message);
+            }
+        }
         public async Task<object> GetById(int id)
         {
             try
             {
                 User user = await userService.GetById(id);
-                if(user == null)
-                {
-                    throw new NotFoundException("User tidak ditemukan");
-                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
                     User = user
                 };
-            }
-            catch(NotFoundException e)
-            {
-                throw e;
             }
             catch(Exception e)
             {
@@ -55,14 +64,17 @@ namespace RecycleHelperApplication.WebAPI.Handlers
             try
             {
                 User userRequest = body.Value<JObject>("User").ToObject<User>();
-                User userResponse = await userService.GetById(userRequest.Id);
+                User userResponse = await userService.GetById(userRequest.IdUser);
 
                 if (userResponse == null)
                 {
                     throw new NotFoundException("User dengan ID tersebut tidak ditemukan");
                 }
                 ExecuteResult result = await userService.InsertUpdate(userRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
@@ -96,7 +108,7 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
-                    ReturnValue = userResponse.Id
+                    ReturnValue = userResponse.IdUser
                 };
             }
             catch (UnauthorizedException e)
@@ -120,7 +132,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                     throw new NotPermittedException("Username telah dipakai");
                 }
                 ExecuteResult result = await userService.InsertUpdate(userRequest);
-
+                if (result.ReturnVariable <= 0)
+                {
+                    throw new InternalServerErrorException("An error has occured");
+                }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,

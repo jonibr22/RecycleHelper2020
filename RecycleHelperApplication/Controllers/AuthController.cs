@@ -1,5 +1,5 @@
 ﻿using RecycleHelperApplication.Service.Modules.Web;
-using RecycleHelperApplication.ViewModels.Auth;
+using RecycleHelperApplication.ViewModels.AuthViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +62,7 @@ namespace RecycleHelperApplication.Controllers.Auth
                     Username = registrationViewModel.Username,
                     Password = registrationViewModel.Password,
                     Name = registrationViewModel.Name,
-                    RoleId = 1
+                    IdRole = 1
                 });
                 return RedirectToAction("Index", "Auth");
             }

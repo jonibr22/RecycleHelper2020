@@ -17,7 +17,10 @@ namespace RecycleHelperApplication
         DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         container.RegisterType<IDbFactory, DBFactory>();
         container.RegisterType<IAuthService, AuthService>();
-
+        container.RegisterType<IBahanService, BahanService>();
+        container.RegisterType<IUserService, UserService>();
+        container.RegisterType<IPanduanService, PanduanService>();
+        container.RegisterType<IKategoriBahanService, KategoriBahanService>();
         return container;
     }
 

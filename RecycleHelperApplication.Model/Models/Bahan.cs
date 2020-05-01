@@ -10,5 +10,6 @@ namespace RecycleHelperApplication.Model.Models
     {
         public int IdBahan { get; set; }
         public string NamaBahan { get; set; }
+        public int IdKategoriBahan { get; set; }
     }
 }

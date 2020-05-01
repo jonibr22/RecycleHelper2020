@@ -1,0 +1,61 @@
+﻿@model RecycleHelperApplication.ViewModels.KategoriBahanViewModels.IndexViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" id="form_kategoribahan">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Form Kategori Bahan</h2>
+            @using (Html.BeginForm("Save", "KategoriBahan", FormMethod.Post, new { id = "form_kategori" }))
+            {
+                @Html.HiddenFor(model => model.IdKategoriBahan, new { Value = Model.IdKategoriBahan, Id = "idkategoribahan_field" })
+                <div class="form-group">
+                    <div class="control-label">
+                        <b>Nama Kategori<span class="red-text">*</span></b>
+                    </div>
+                    @Html.EditorFor(model => model.NamaKategoriBahan, new { htmlAttributes = new { @class = "form-control input-sm", @id = "namakategoribahan_field" } })
+                    <span class="red-text">
+                        @Html.ValidationMessageFor(model => model.NamaKategoriBahan)
+                    </span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="container_list_kategori_bahan">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#container_list_kategori_bahan').load('@Url.Action("_KategoriBahanTable","KategoriBahan")')
+    })
+</script>
+@if (TempData["viewForm"] == null)
+{
+    <script>
+        $(document).ready(function () {
+            $('#form_kategoribahan').hide();
+        })
+    </script>
+}
+else
+{
+    <script>
+        $(document).ready(function () {
+            $('#form_kategoribahan').show();
+        })
+    </script>
+}
+
