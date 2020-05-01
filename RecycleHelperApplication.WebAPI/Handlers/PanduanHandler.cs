@@ -11,35 +11,35 @@ using System.Web;
 
 namespace RecycleHelperApplication.WebAPI.Handlers
 {
-    public interface IBahanHandler
+    public interface IPanduanHandler
     {
-        Task<object> GetAllBahan();
+        Task<object> GetAllPanduan();
         Task<object> Insert(JObject body);
         Task<object> Update(JObject body);
         Task<object> Delete(JObject body);
     }
-    public class BahanHandler : IBahanHandler
+    public class PanduanHandler : IPanduanHandler
     {
-        private readonly IBahanApiService BahanService;
+        private readonly IPanduanApiService PanduanService;
 
-        public BahanHandler(IBahanApiService BahanService)
+        public PanduanHandler(IPanduanApiService PanduanService)
         {
-            this.BahanService = BahanService;
+            this.PanduanService = PanduanService;
         }
-        public async Task<object> GetAllBahan()
+        public async Task<object> GetAllPanduan()
         {
             try
             {
-                List<Bahan> BahanResponse = await BahanService.GetAllBahan();
+                List<Panduan> PanduanResponse = await PanduanService.GetAllPanduan();
 
-                if (BahanResponse == null)
+                if (PanduanResponse == null)
                 {
-                    throw new NotFoundException("Bahan tidak ada");
+                    throw new NotFoundException("Panduan tidak ada");
                 }
                 return new
                 {
                     Status = Models.APIResult.ResultSuccessStatus,
-                    ListBahan = BahanResponse
+                    ListPanduan = PanduanResponse
                 };
             }
             catch (NotFoundException e)
@@ -55,13 +55,13 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         {
             try
             {
-                Bahan bahanRequest = body.Value<JObject>("Bahan").ToObject<Bahan>();
-                List<Bahan> listAllBahan  = await BahanService.GetAllBahan();
-                if(listAllBahan.Any(x => x.NamaBahan.ToLower().Trim() == bahanRequest.NamaBahan.ToLower().Trim()))
+                Panduan PanduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
+                List<Panduan> listAllPanduan  = await PanduanService.GetAllPanduan();
+                if(listAllPanduan.Any(x => x.NamaPanduan.ToLower().Trim() == PanduanRequest.NamaPanduan.ToLower().Trim()))
                 {
-                    throw new NotPermittedException("Nama bahan yang sama sudah tersedia");
+                    throw new NotPermittedException("Nama Panduan yang sama sudah tersedia");
                 }
-                ExecuteResult result = await BahanService.InsertUpdate(bahanRequest);
+                ExecuteResult result = await PanduanService.InsertUpdate(PanduanRequest);
 
                 return new
                 {
@@ -82,14 +82,14 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         {
             try
             {
-                Bahan bahanRequest = body.Value<JObject>("Bahan").ToObject<Bahan>();
-                Bahan bahanResponse = await BahanService.GetById(bahanRequest.IdBahan);
+                Panduan PanduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
+                Panduan PanduanResponse = await PanduanService.GetById(PanduanRequest.IdPanduan);
 
-                if (bahanResponse == null)
+                if (PanduanResponse == null)
                 {
-                    throw new NotFoundException("Bahan dengan ID tersebut tidak ditemukan");
+                    throw new NotFoundException("Panduan dengan ID tersebut tidak ditemukan");
                 }
-                ExecuteResult result = await BahanService.InsertUpdate(bahanRequest);
+                ExecuteResult result = await PanduanService.InsertUpdate(PanduanRequest);
 
                 return new
                 {
@@ -110,14 +110,14 @@ namespace RecycleHelperApplication.WebAPI.Handlers
         {
             try
             {
-                Bahan bahanRequest = body.Value<JObject>("Bahan").ToObject<Bahan>();
-                Bahan bahanResponse = await BahanService.GetById(bahanRequest.IdBahan);
+                Panduan PanduanRequest = body.Value<JObject>("Panduan").ToObject<Panduan>();
+                Panduan PanduanResponse = await PanduanService.GetById(PanduanRequest.IdPanduan);
 
-                if (bahanResponse == null)
+                if (PanduanResponse == null)
                 {
-                    throw new NotFoundException("Bahan dengan ID tersebut tidak ditemukan");
+                    throw new NotFoundException("Panduan dengan ID tersebut tidak ditemukan");
                 }
-                ExecuteResult result = await BahanService.Delete(bahanRequest);
+                ExecuteResult result = await PanduanService.Delete(PanduanRequest);
 
                 return new
                 {

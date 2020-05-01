@@ -15,6 +15,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Bahan>> GetAllBahan();
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
+        Task<ExecuteResult> Delete(Bahan bahan);
     }
     public class BahanApiService : IBahanApiService
     {
@@ -46,6 +47,22 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 {
                     new SqlParameter("@IdBahan", bahan.IdBahan),
                     new SqlParameter("@NamaBahan", bahan.NamaBahan)
+                }
+            });
+
+            ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
+            return ReturnValue;
+        }
+        public async Task<ExecuteResult> Delete(Bahan bahan)
+        {
+            ExecuteResult ReturnValue = new ExecuteResult();
+            List<StoredProcedure> Data = new List<StoredProcedure>();
+
+            Data.Add(new StoredProcedure {
+                SPName = "Bahan_Delete @IdBahan",
+                SQLParam = new SqlParameter[]
+                {
+                    new SqlParameter("@IdBahan", bahan.IdBahan)
                 }
             });
 
