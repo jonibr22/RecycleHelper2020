@@ -1,10 +1,15 @@
-﻿using RecycleHelperApplication.Data.Repositories;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RecycleHelperApplication.Data.Repositories;
 using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
+using RecycleHelperApplication.Service.Helper.APIHelper;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +23,10 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<Panduan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Panduan Panduan);
         Task<ExecuteResult> Delete(int id);
+        //Task<int> Delete(string ids);
         Task<ExecuteResult> DeleteMultiple(string ids);
+        Task<int> Insert(Panduan panduan);
+        Task<int> Update(Panduan panduan);
     }
     public class PanduanApiService : IPanduanApiService
     {
@@ -121,6 +129,49 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
+        }
+
+        public async Task<int> Insert(Panduan panduan)
+        {
+            HttpClient client = new APICall.HttpClientBuilder()
+               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
+               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
+               .Build();
+
+            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
+            Body.Add("Panduan", panduan);
+
+            var result = (await new APICall().Execute($"Panduan", client, HttpMethod.Post, Body)).Data.ToString();
+            if (result.GetStatusCode() == 200)
+            {
+                JObject jObj = JObject.Parse(result);
+                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
+                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
+                return id;
+            }
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
+        }
+        public async Task<int> Update(Panduan panduan)
+        {
+            HttpClient client = new APICall.HttpClientBuilder()
+               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
+               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
+               .Build();
+
+            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
+            Body.Add("Panduan", panduan);
+
+            var result = (await new APICall().Execute($"Panduan", client, HttpMethod.Put, Body)).Data.ToString();
+            if (result.GetStatusCode() == 200)
+            {
+                JObject jObj = JObject.Parse(result);
+                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
+                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
+                return id;
+            }
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
         }
     }
 }

@@ -1,10 +1,15 @@
-﻿using RecycleHelperApplication.Data.Repositories;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RecycleHelperApplication.Data.Repositories;
 using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
+using RecycleHelperApplication.Service.Helper.APIHelper;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,8 +23,10 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Bahan>> GetListByPanduan(int idPanduan);
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
-        Task<ExecuteResult> DeleteBahan(int IdBahan);
+        Task<int> Delete(string ids);
         Task<ExecuteResult> DeleteMultiple(string ids);
+        Task<int> Insert(Bahan bahan);
+        Task<int> Update(Bahan bahan);
     }
     public class BahanApiService : IBahanApiService
     {
@@ -80,23 +87,23 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
             return ReturnValue;
         }
 
-        public async Task<ExecuteResult> DeleteBahan(int IdBahan)
+        public async Task<int> Delete(string ids)
         {
-            var Param = new SqlParameter[]
+            HttpClient client = new APICall.HttpClientBuilder()
+               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
+               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
+               .Build();
+
+            var result = (await new APICall().Execute($"Bahan/Multiple/{ids}", client, HttpMethod.Delete)).Data.ToString();
+            if (result.GetStatusCode() == 200)
             {
-                new SqlParameter("@IdBahan", IdBahan)
-            };
-
-            List<StoredProcedure> Data = new List<StoredProcedure>();
-            Data.Add(new StoredProcedure
-            {
-                SPName = "Bahan_Delete @IdBahan",
-                SQLParam = Param
-            });
-
-            ExecuteResult ResultValue = (await bahanRepository.ExecMultipleSPWithTransaction(Data));
-
-            return ResultValue;
+                JObject jObj = JObject.Parse(result);
+                string retvalStr = jObj.SelectToken("ReturnValue").ToString();
+                int retval = JsonConvert.DeserializeObject<int>(retvalStr);
+                return retval;
+            }
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
         }
         public async Task<ExecuteResult> DeleteMultiple(string ids)
         {
@@ -114,6 +121,48 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
+        }
+        public async Task<int> Insert(Bahan bahan)
+        {
+            HttpClient client = new APICall.HttpClientBuilder()
+               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
+               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
+               .Build();
+
+            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
+            Body.Add("Bahan", bahan);
+
+            var result = (await new APICall().Execute($"Bahan", client, HttpMethod.Post, Body)).Data.ToString();
+            if (result.GetStatusCode() == 200)
+            {
+                JObject jObj = JObject.Parse(result);
+                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
+                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
+                return id;
+            }
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
+        }
+        public async Task<int> Update(Bahan bahan)
+        {
+            HttpClient client = new APICall.HttpClientBuilder()
+               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
+               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
+               .Build();
+
+            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
+            Body.Add("Bahan", bahan);
+
+            var result = (await new APICall().Execute($"Bahan", client, HttpMethod.Put, Body)).Data.ToString();
+            if (result.GetStatusCode() == 200)
+            {
+                JObject jObj = JObject.Parse(result);
+                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
+                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
+                return id;
+            }
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
         }
     }
 }
