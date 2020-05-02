@@ -1,0 +1,51 @@
+﻿@model RecycleHelperApplication.ViewModels.UserViewModels.IndexViewModel
+@{
+    ViewBag.Title = "Index";
+}
+@using RecycleHelperApplication.Service.Helper
+<div style="margin: 10px 0">
+    <div style="display: inline;">
+        <h2 style="display: inline;">List User</h2>
+    </div>
+    <div style="display: inline;" class="pull-right">
+        @Html.ActionLink("See My Profile", $"Detail/{Session[SessionEnum.USER_ID]}", "User", new { }, new { @class = "btn btn-primary" })
+    </div>
+</div>
+<table id="users-datatable">
+    <thead>
+        <tr>
+            <th></th>
+            <th width="50%">Nama</th>
+            <th width="15%">Role</th>
+            <th width="25%">Username</th>
+            <th width="10%">Toggle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model.ListUser)
+        {
+            <tr>
+                <td>@a.IdUser</td>
+                <td>@a.Name</td>
+                <td>@Model.ListRole.First(x => x.IdRole == a.IdRole).NamaRole</td>
+                <td>@a.Username</td>
+                <td>@Html.ActionLink("Look Up",$"Detail/{a.IdUser}","User", new { }, new { @class = "btn btn-secondary" })</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    var table = $("#users-datatable").DataTable({
+        order: [[0, "asc"]],
+        columnDefs: [
+            { visible: false, targets: [0] },
+            { orderable: false, targets: [1] },
+            { orderable: true, targets: [2] },
+            { orderable: false, targets: [3] }
+        ],
+        responsive: true,
+        autoWidth: false,
+        scrollX: false,
+        fixedHeader: true
+    });
+</script>

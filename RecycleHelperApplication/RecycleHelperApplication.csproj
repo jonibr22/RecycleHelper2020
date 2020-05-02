@@ -215,6 +215,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KategoriBahanController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -224,6 +225,10 @@
     <Compile Include="ViewModels\HomeViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\KategoriBahanTableViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\ContributionTableViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\DetailViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\IndexViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\PasswordManagementViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -253,6 +258,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -265,6 +271,8 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Content\images\default-avatar.png" />
+    <Content Include="Uploads\UserProfilePictures\0.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -284,6 +292,10 @@
     <Content Include="Views\Shared\_SuperLayout.cshtml" />
     <Content Include="Views\KategoriBahan\Index.cshtml" />
     <Content Include="Views\KategoriBahan\_KategoriBahanTable.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Detail.cshtml" />
+    <Content Include="Views\User\_ContributionTable.cshtml" />
+    <Content Include="Views\User\_PasswordManagement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

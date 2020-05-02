@@ -1,0 +1,213 @@
+﻿@model RecycleHelperApplication.ViewModels.UserViewModels.DetailViewModel
+@{
+    ViewBag.Title = "Detail";
+}
+@using RecycleHelperApplication.Service.Helper
+<style>
+    body {
+        padding-top: 68px;
+        padding-bottom: 50px;
+    }
+
+    .image-container {
+        position: relative;
+    }
+
+    .image {
+        opacity: 1;
+        display: block;
+        width: 100%;
+        height: auto;
+        transition: .5s ease;
+        backface-visibility: hidden;
+    }
+
+    .middle {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .image-container:hover .image {
+        opacity: 0.3;
+    }
+
+    .image-container:hover .middle {
+        opacity: 1;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <br>
+        <br>
+        <div class="span3 well">
+            <center>
+                <div style="display: flex;align-items: center;justify-content:center" id="pv_photo">
+                    @if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+                    {
+                    using (Html.BeginForm("UploadPhoto", "User", FormMethod.Post,new { @id = "form_photo", @enctype = "multipart/form-data" }))
+                    {
+                        <div class="image-container">
+                            <img src='@Url.Content(Model.PhotoUrl)' id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />
+                            <div class="middle">
+                                <input type="button" class="btn btn-secondary" id="btnChangePicture" value="Change" />
+                                @Html.EditorFor(model => model.File, new { htmlAttributes = new { @style = "display: none;", @id = "profilePicture", @accept = ".jpg,.jpeg,.png,.gif", @type = "file" } })
+                            </div>
+                        </div>
+                    }
+                    <script>
+                        $(document).ready(function () {
+                            $imgSrc = $('#imgProfile').attr('src');
+                            function readURL(input) {
+                                var filePath = input.value;
+                                var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                                if (!allowedExtensions.exec(filePath)) {
+                                    showAlert('error','We only support PNG, JPEG, or GIF pictures.');
+                                    input.value = '';
+                                    return false;
+                                }
+                                return true;
+                            }
+
+                            $('#btnChangePicture').on('click', function () {
+                                $('#profilePicture').click();
+                            });
+                            $('#profilePicture').on('change', function () {
+                                if (readURL(this)) {
+                                    $('#form_photo').submit();
+                                }
+                            });
+                        });
+                    </script>
+                    }
+                    else
+                    {
+                    <div class="image-container">
+                        <img src='@Url.Content(Model.PhotoUrl)' id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />
+                    </div>
+                    }
+                </div>
+                <div style="margin-top: 10px">
+                @if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+                {
+                <div id="name_fixed">
+                    <h3 style="display: inline">@Model.Name</h3>
+                    <a href="javascript:void(0);" id="icon_edit"><i class="glyphicon glyphicon-edit" style="color: darkgrey"></i></a>
+                </div>
+                <div id="name_change" hidden>
+                    @Html.Editor("edit_name", new { htmlAttributes = new { Value = Model.Name, @style = "padding:0;border:0;font-size:24px;text-align:center" } })
+                </div>
+                }
+                else
+                {
+                <div id="name_fixed">
+                    <h3 style="display: inline">@Model.Name</h3>
+                </div>
+                }
+                </div>
+                <div style="margin-top: 10px">
+                    <em>@@@Model.Username</em>
+                </div>
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a id="contrib-tab" data-toggle="tab" href="#contrib">Contribution</a>
+                </li>
+                @if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+                {
+                <li>
+                    <a id="security-tab" data-toggle="tab" href="#security">Security</a>
+                </li>
+                }
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="contrib">
+                    <div style="margin: 15px 0">
+                        <div style="display: inline;">
+                            <h3 style="display: inline;">Panduan Contributions</h3>
+                        </div>
+                        @if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+                        {
+                        <div style="display: inline;" class="pull-right">
+                            <button class="btn btn-primary"><i class="glyphicon glyphicon-cog" style="color: white"></i> Manage</button>
+                        </div>
+                        }
+                    </div>
+                    <div id="pv_contrib">
+
+                    </div>
+                </div>
+                @if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+                {
+                <div class="tab-pane fade" id="security">
+                    <div id="pv_pwmanage">
+
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#pv_contrib').load('@Url.Action("_ContributionTable","User",new { idUser = Model.IdUser})')
+    })
+</script>
+@if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+{
+<script>
+    $(document).ready(function(){
+        $('#pv_pwmanage').load('@Url.Action("_PasswordManagement","User", new { idUser = Model.IdUser })')
+    })
+</script>
+<script>
+    $('#icon_edit').click(function() {
+        $('#name_fixed').hide();
+        $('#name_change').show();
+        $('#edit_name').trigger('focus')
+    })
+    $('#edit_name').blur(function() {
+        var newName = $('#edit_name').val()
+        $.ajax({
+            type: 'POST',
+            url: location.origin + '/User/_ChangeName',
+            data:{
+                id: @Model.IdUser,
+                name: newName
+            },
+            beforeSend: function(){
+                startLoaderScreen()
+            },
+            success: function(data){
+                if (data.status == "success")
+                {
+                    $('#edit_name').val(data.name)
+                    $('#name_fixed>h3').html(data.name)
+                    $('#name_change').hide();
+                    $('#name_fixed').show();
+                }
+                else
+                {
+                    $('#edit_name').val('@Model.Name')
+                    $('#name_change').hide();
+                    $('#name_fixed').show();
+                    showAlert('error', data.message)
+                }
+            },
+            error: function(e){
+                showAlert('error', 'request failed')
+            }
+        })
+    })
+</script>
+}

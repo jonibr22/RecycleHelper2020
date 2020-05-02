@@ -1,0 +1,44 @@
+﻿@model RecycleHelperApplication.ViewModels.UserViewModels.ContributionTableViewModel
+
+<table id="contrib-datatable">
+    <thead>
+        <tr>
+            <th></th>
+            <th width="30%">Nama Panduan</th>
+            <th width="60%">Bahan</th>
+            <th width="10%">Toggle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model.ListPanduan)
+        {
+            var listBahan = Model.ListBahanByPanduan[a.IdPanduan];
+            <tr>
+                <td>@a.IdPanduan</td>
+                <td>@a.NamaPanduan</td>
+                <td>
+                    @foreach (var b in listBahan)
+                    {
+                        <span class="label label-default">@b.NamaBahan</span>
+                    }
+                </td>
+                <td><button class="btn btn-secondary">Look Up</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    var table = $("#contrib-datatable").DataTable({
+        order: [[0, "asc"]],
+        columnDefs: [
+            { visible: false, targets: [0] },
+            { orderable: true, targets: [1] },
+            { orderable: false, targets: [2] },
+            { orderable: false, targets: [3] }
+        ],
+        responsive: true,
+        autoWidth: false,
+        scrollX: false,
+        fixedHeader: true
+    });
+</script>
