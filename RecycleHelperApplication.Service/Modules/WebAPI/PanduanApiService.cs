@@ -22,7 +22,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Panduan>> GetListByUser(int userId);
         Task<Panduan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Panduan Panduan);
-        Task<ExecuteResult> Delete(Panduan Panduan);
+        Task<ExecuteResult> Delete(int id);
         //Task<ExecuteResult> Delete(int id);
         Task<ExecuteResult> DeleteMultiple(string ids);
     }
@@ -78,33 +78,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
             ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
-        //public async Task<ExecuteResult> Delete(int id)
-        //{
-        //    ExecuteResult ReturnValue = new ExecuteResult();
-        //    List<StoredProcedure> Data = new List<StoredProcedure>();
-
-        //    Data.Add(new StoredProcedure
-        //    {
-        //        SPName = "DetailPanduan_DeleteByPanduan @IdPanduan",
-        //        SQLParam = new SqlParameter[]
-        //        {
-        //            new SqlParameter("@IdPanduan", id)
-        //        }
-        //    });
-        //    Data.Add(new StoredProcedure
-        //    {
-        //        SPName = "Panduan_Delete @IdPanduan",
-        //        SQLParam = new SqlParameter[]
-        //        {
-        //            new SqlParameter("@IdPanduan", id)
-        //        }
-        //    });
-
-        //    ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
-        //    return ReturnValue;
-        //}
-
-        public async Task<ExecuteResult> Delete(Panduan panduan)
+        public async Task<ExecuteResult> Delete(int id)
         {
             ExecuteResult ReturnValue = new ExecuteResult();
             List<StoredProcedure> Data = new List<StoredProcedure>();
@@ -114,7 +88,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 SPName = "DetailPanduan_DeleteByPanduan @IdPanduan",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@IdPanduan", panduan.IdPanduan)
+                    new SqlParameter("@IdPanduan", id)
                 }
             });
             Data.Add(new StoredProcedure
@@ -122,7 +96,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 SPName = "Panduan_Delete @IdPanduan",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@IdPanduan", panduan.IdPanduan)
+                    new SqlParameter("@IdPanduan", id)
                 }
             });
 

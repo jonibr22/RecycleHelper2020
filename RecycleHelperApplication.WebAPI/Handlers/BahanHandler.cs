@@ -167,7 +167,7 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 {
                     throw new NotFoundException("Bahan tidak ditemukan, tidak dapat delete");
                 }
-                ExecuteResult result = await bahanService.DeleteBahan(IdBahan);
+                ExecuteResult result = await bahanService.Delete(IdBahan);
                 if (result.ReturnVariable <= 0)
                 {
                     throw new InternalServerErrorException("An error has occured");

@@ -254,7 +254,6 @@
     <Compile Include="Handlers\BahanHandler.cs" />
     <Compile Include="Handlers\DetailPanduanHandler.cs" />
     <Compile Include="Handlers\KategoriBahanHandler.cs" />
-    <Compile Include="Handlers\PanduanHandler.cs" />
     <Compile Include="Handlers\RoleHandler.cs" />
     <Compile Include="Handlers\UserHandler.cs" />
     <Compile Include="Models\APIResult.cs" />
