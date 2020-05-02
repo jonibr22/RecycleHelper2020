@@ -38,6 +38,7 @@
 	    padding: 15px 0;
         padding: 10px;
     }  
+    
 </style>
 <h2>Define your Ingredients</h2>
 <div class="float-container">
@@ -121,7 +122,7 @@
                     <td>@item.NamaPanduan</td>
                     <td>@item.DeskripsiPanduan</td>
                     <td>@ListUser.FirstOrDefault(x => x.IdUser == item.IdUser).Name</td>
-                    <td><i class="btn btn-danger" >Find Out</i></td>
+                    <td><button class="btn btn-danger" >@Html.ActionLink("Find Out","Index","DetailPanduan",new { IdPanduan = item.IdPanduan}, new { id = "form_kategori", @style = "color: White; font-style: none;" })</button></td>
                 </tr>
             }
         </tbody>

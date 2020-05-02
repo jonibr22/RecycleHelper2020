@@ -215,6 +215,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KategoriBahanController.cs" />
+    <Compile Include="Controllers\DetailPanduanController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -224,6 +225,7 @@
     <Compile Include="ViewModels\HomeViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\KategoriBahanTableViewModel.cs" />
+    <Compile Include="ViewModels\DetailPanduanViewModels\DetailPanduanViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -284,6 +286,7 @@
     <Content Include="Views\Shared\_SuperLayout.cshtml" />
     <Content Include="Views\KategoriBahan\Index.cshtml" />
     <Content Include="Views\KategoriBahan\_KategoriBahanTable.cshtml" />
+    <Content Include="Views\DetailPanduan\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

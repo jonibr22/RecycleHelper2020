@@ -15,6 +15,7 @@ namespace RecycleHelperApplication.Service.Modules.Web
     public interface IPanduanService
     {
         Task<List<Panduan>> GetListByMultipleBahan(string ids);
+        Task<Panduan> GetById(int idPanduan);
     }
     public class PanduanService : IPanduanService
     {
@@ -36,5 +37,25 @@ namespace RecycleHelperApplication.Service.Modules.Web
             string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
             throw new Exception(errMsg);
         }
+
+        public async Task <Panduan> GetById (int id)
+        {
+            HttpClient client = new APICall.HttpClientBuilder()
+               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
+               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
+               .Build();
+
+            var result = (await new APICall().Execute($"Panduan/{id}", client, HttpMethod.Get)).Data.ToString();
+            if (result.GetStatusCode() == 200)
+            {
+                JObject jObj = JObject.Parse(result);
+                string kategoriBahanStr = jObj.SelectToken("Panduan").ToString();
+                Panduan Panduan = JsonConvert.DeserializeObject<Panduan>(kategoriBahanStr);
+                return Panduan;
+            }
+            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
+            throw new Exception(errMsg);
+        }
+
     }
 }
