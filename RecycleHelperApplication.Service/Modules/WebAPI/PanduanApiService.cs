@@ -23,7 +23,6 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<Panduan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Panduan Panduan);
         Task<ExecuteResult> Delete(int id);
-        //Task<ExecuteResult> Delete(int id);
         Task<ExecuteResult> DeleteMultiple(string ids);
     }
     public class PanduanApiService : IPanduanApiService

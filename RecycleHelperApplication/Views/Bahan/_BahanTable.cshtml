@@ -20,7 +20,8 @@
         <tr>
             <th></th>
             <th width="5%"></th>
-            <th width="75%">Nama</th>
+            <th width="37%">Nama</th>
+            <th width="38%">Kategori Bahan</th>
             <th width="20%">Toggle</th>
         </tr>
     </thead>
@@ -31,7 +32,7 @@
                 <td>@a.IdBahan</td>
                 <td>
                     <div style="text-align: center;">
-                        <span class="chkPilih">@Html.CheckBox("cbx_bahan" + a.IdBahan, false, new { value = a.IdBahan })</span>
+                        <span class="chkPilih">@Html.CheckBox("cbx_bahan" + a.IdBahan + a.IdKategoriBahan, false, new { value = a.IdBahan, a.IdKategoriBahan })</span>
                     </div>
                 </td>
                 <td>@a.NamaBahan</td>
@@ -69,7 +70,7 @@
                     startLoaderScreen();
                 },
                 success: function (data) {
-                    $('#form_bahan').show();
+                    $('#form_bahancon').show();
                     $('#idbahan_field').val(data.id);
                     $('#namabahan_field').val(data.name);
                     $('#idkategoribahan_field').val(data.idKategori);

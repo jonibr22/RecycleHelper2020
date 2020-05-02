@@ -1,5 +1,6 @@
 ﻿using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
+using RecycleHelperApplication.Service.Helper;
 using RecycleHelperApplication.Service.Modules.Web;
 using RecycleHelperApplication.ViewModels.BahanViewModels;
 using System;
@@ -30,16 +31,24 @@ namespace RecycleHelperApplication.Controllers
             this.bahanService = bahanService;
         }
         // GET: Bahan
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             IndexViewModel indexViewModel = new IndexViewModel();
+            await SetDropdownIndex(indexViewModel);
             return View(indexViewModel);
         }
+
+        private async Task SetDropdownIndex(IndexViewModel indexViewModel)
+        {
+            indexViewModel.ListKategoriBahan = await DropdownHelper.GetKategoriBahanDropdown();
+        }
+
         public async Task<ActionResult> Save(IndexViewModel indexViewModel)
         {
             if (!ModelState.IsValid)
             {
                 TempData["viewForm"] = 1;
+                await SetDropdownIndex(indexViewModel);
                 return View("Index", indexViewModel);
             }
             try
@@ -53,6 +62,7 @@ namespace RecycleHelperApplication.Controllers
                         NamaBahan = indexViewModel.NamaBahan,
                         IdKategoriBahan = indexViewModel.IdKategoriBahan,
                     });
+                    await SetDropdownIndex(indexViewModel);
                     ListAlert.Add(new AlertMessage("success", "Data berhasil disimpan"));
                     TempData["ListAlert"] = ListAlert;
                 }
@@ -65,6 +75,7 @@ namespace RecycleHelperApplication.Controllers
                         NamaBahan = indexViewModel.NamaBahan,
                         IdKategoriBahan = indexViewModel.IdKategoriBahan,
                     });
+                    await SetDropdownIndex(indexViewModel);
                     ListAlert.Add(new AlertMessage("success", "Data berhasil diubah"));
                     TempData["ListAlert"] = ListAlert;
                 }
