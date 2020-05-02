@@ -5,5 +5,6 @@
     [Password] VARCHAR(MAX) NOT NULL, 
     [IdRole] INT NOT NULL, 
     [Name] VARCHAR(MAX) NOT NULL
-	FOREIGN KEY (IdRole) REFERENCES msRole(IdRole)
+	FOREIGN KEY (IdRole) REFERENCES msRole(IdRole), 
+    [PhotoUrl] VARCHAR(MAX) NULL
 )
