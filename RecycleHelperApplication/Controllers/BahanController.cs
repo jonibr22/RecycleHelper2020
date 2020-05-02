@@ -1,6 +1,6 @@
 ﻿using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
-using RecycleHelperApplication.Service.Modules.WebAPI;
+using RecycleHelperApplication.Service.Modules.Web;
 using RecycleHelperApplication.ViewModels.BahanViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,9 +23,9 @@ namespace RecycleHelperApplication.Controllers
         //{
 
         //}
-        private readonly IBahanApiService bahanService;
+        private readonly IBahanService bahanService;
         private List<AlertMessage> ListAlert = new List<AlertMessage>();
-        public BahanController(IBahanApiService bahanService)
+        public BahanController(IBahanService bahanService)
         {
             this.bahanService = bahanService;
         }

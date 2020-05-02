@@ -23,10 +23,8 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Bahan>> GetListByPanduan(int idPanduan);
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
-        Task<int> Delete(string ids);
+        Task<ExecuteResult> Delete(Bahan bahan);
         Task<ExecuteResult> DeleteMultiple(string ids);
-        Task<int> Insert(Bahan bahan);
-        Task<int> Update(Bahan bahan);
     }
     public class BahanApiService : IBahanApiService
     {
@@ -86,25 +84,24 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
             ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
-
-        public async Task<int> Delete(string ids)
+        public async Task<ExecuteResult> Delete(Bahan bahan)
         {
-            HttpClient client = new APICall.HttpClientBuilder()
-               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
-               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
-               .Build();
+            ExecuteResult ReturnValue = new ExecuteResult();
+            List<StoredProcedure> Data = new List<StoredProcedure>();
 
-            var result = (await new APICall().Execute($"Bahan/Multiple/{ids}", client, HttpMethod.Delete)).Data.ToString();
-            if (result.GetStatusCode() == 200)
+            Data.Add(new StoredProcedure
             {
-                JObject jObj = JObject.Parse(result);
-                string retvalStr = jObj.SelectToken("ReturnValue").ToString();
-                int retval = JsonConvert.DeserializeObject<int>(retvalStr);
-                return retval;
-            }
-            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
-            throw new Exception(errMsg);
+                SPName = "Bahan_Delete @IdBahan",
+                SQLParam = new SqlParameter[]
+                {
+                    new SqlParameter("@IdBahan", bahan.IdBahan)
+                }
+            });
+
+            ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
+            return ReturnValue;
         }
+
         public async Task<ExecuteResult> DeleteMultiple(string ids)
         {
             ExecuteResult ReturnValue = new ExecuteResult();
@@ -121,48 +118,6 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
-        }
-        public async Task<int> Insert(Bahan bahan)
-        {
-            HttpClient client = new APICall.HttpClientBuilder()
-               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
-               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
-               .Build();
-
-            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
-            Body.Add("Bahan", bahan);
-
-            var result = (await new APICall().Execute($"Bahan", client, HttpMethod.Post, Body)).Data.ToString();
-            if (result.GetStatusCode() == 200)
-            {
-                JObject jObj = JObject.Parse(result);
-                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
-                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
-                return id;
-            }
-            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
-            throw new Exception(errMsg);
-        }
-        public async Task<int> Update(Bahan bahan)
-        {
-            HttpClient client = new APICall.HttpClientBuilder()
-               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
-               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
-               .Build();
-
-            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
-            Body.Add("Bahan", bahan);
-
-            var result = (await new APICall().Execute($"Bahan", client, HttpMethod.Put, Body)).Data.ToString();
-            if (result.GetStatusCode() == 200)
-            {
-                JObject jObj = JObject.Parse(result);
-                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
-                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
-                return id;
-            }
-            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
-            throw new Exception(errMsg);
         }
     }
 }

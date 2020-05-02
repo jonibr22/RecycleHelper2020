@@ -22,11 +22,9 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Panduan>> GetListByUser(int userId);
         Task<Panduan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Panduan Panduan);
-        Task<ExecuteResult> Delete(int id);
-        //Task<int> Delete(string ids);
+        Task<ExecuteResult> Delete(Panduan Panduan);
+        //Task<ExecuteResult> Delete(int id);
         Task<ExecuteResult> DeleteMultiple(string ids);
-        Task<int> Insert(Panduan panduan);
-        Task<int> Update(Panduan panduan);
     }
     public class PanduanApiService : IPanduanApiService
     {
@@ -80,7 +78,33 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
             ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
-        public async Task<ExecuteResult> Delete(int id)
+        //public async Task<ExecuteResult> Delete(int id)
+        //{
+        //    ExecuteResult ReturnValue = new ExecuteResult();
+        //    List<StoredProcedure> Data = new List<StoredProcedure>();
+
+        //    Data.Add(new StoredProcedure
+        //    {
+        //        SPName = "DetailPanduan_DeleteByPanduan @IdPanduan",
+        //        SQLParam = new SqlParameter[]
+        //        {
+        //            new SqlParameter("@IdPanduan", id)
+        //        }
+        //    });
+        //    Data.Add(new StoredProcedure
+        //    {
+        //        SPName = "Panduan_Delete @IdPanduan",
+        //        SQLParam = new SqlParameter[]
+        //        {
+        //            new SqlParameter("@IdPanduan", id)
+        //        }
+        //    });
+
+        //    ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
+        //    return ReturnValue;
+        //}
+
+        public async Task<ExecuteResult> Delete(Panduan panduan)
         {
             ExecuteResult ReturnValue = new ExecuteResult();
             List<StoredProcedure> Data = new List<StoredProcedure>();
@@ -90,7 +114,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 SPName = "DetailPanduan_DeleteByPanduan @IdPanduan",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@IdPanduan", id)
+                    new SqlParameter("@IdPanduan", panduan.IdPanduan)
                 }
             });
             Data.Add(new StoredProcedure
@@ -98,13 +122,14 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 SPName = "Panduan_Delete @IdPanduan",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@IdPanduan", id)
+                    new SqlParameter("@IdPanduan", panduan.IdPanduan)
                 }
             });
 
             ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
+
         public async Task<ExecuteResult> DeleteMultiple(string ids)
         {
             ExecuteResult ReturnValue = new ExecuteResult();
@@ -129,49 +154,6 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
-        }
-
-        public async Task<int> Insert(Panduan panduan)
-        {
-            HttpClient client = new APICall.HttpClientBuilder()
-               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
-               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
-               .Build();
-
-            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
-            Body.Add("Panduan", panduan);
-
-            var result = (await new APICall().Execute($"Panduan", client, HttpMethod.Post, Body)).Data.ToString();
-            if (result.GetStatusCode() == 200)
-            {
-                JObject jObj = JObject.Parse(result);
-                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
-                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
-                return id;
-            }
-            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
-            throw new Exception(errMsg);
-        }
-        public async Task<int> Update(Panduan panduan)
-        {
-            HttpClient client = new APICall.HttpClientBuilder()
-               .SetBaseURL(ConfigurationManager.AppSettings["API_BASE_URL"])
-               .SetMediaTypeWithQualityHeaderValue(APICall.APPLICATIONJSON)
-               .Build();
-
-            Dictionary<string, dynamic> Body = new Dictionary<string, dynamic>();
-            Body.Add("Panduan", panduan);
-
-            var result = (await new APICall().Execute($"Panduan", client, HttpMethod.Put, Body)).Data.ToString();
-            if (result.GetStatusCode() == 200)
-            {
-                JObject jObj = JObject.Parse(result);
-                string ReturnValueStr = jObj.SelectToken("ReturnValue").ToString();
-                int id = JsonConvert.DeserializeObject<int>(ReturnValueStr);
-                return id;
-            }
-            string errMsg = result.GetStatusCode() + " " + result.GetStatusMessage() + " : " + result.GetMessage();
-            throw new Exception(errMsg);
         }
     }
 }

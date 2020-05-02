@@ -1,6 +1,6 @@
 ﻿using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
-using RecycleHelperApplication.Service.Modules.WebAPI;
+using RecycleHelperApplication.Service.Modules.Web;
 using RecycleHelperApplication.ViewModels.PanduanViewModel;
 using System;
 using System.Collections.Generic;
@@ -18,21 +18,11 @@ namespace RecycleHelperApplication.Controllers
         //{
         //    return View();
         //}
-        private readonly IPanduanApiService panduanService;
-        private readonly IBahanApiService bahanService;
-        private readonly IDetailPanduanApiService detailPanduanService;
+        private readonly IPanduanService panduanService;
         private List<AlertMessage> ListAlert = new List<AlertMessage>();
-        public PanduanController(IPanduanApiService panduanService)
+        public PanduanController(IPanduanService panduanService)
         {
             this.panduanService = panduanService;
-        }
-        public PanduanController(IBahanApiService bahanService)
-        {
-            this.bahanService = bahanService;
-        }
-        public PanduanController(IDetailPanduanApiService detailPanduanService)
-        {
-            this.detailPanduanService = detailPanduanService;
         }
         // GET: Bahan
         public ActionResult Index()
@@ -59,14 +49,7 @@ namespace RecycleHelperApplication.Controllers
                         DeskripsiPanduan = indexViewModel.DeskripsiPanduan,
                         IdUser = indexViewModel.IdUser,
                     });
-                    //int idDetail = await detailPanduanService.Insert(new Model.Models.DetailPanduan
-                    //{
-
-                    //});
-                    var idBahan = await detailPanduanService.Insert(new Model.Models.DetailPanduan
-                    {
-                       IdBahan = indexViewModel.IdBahan
-                    });
+                
                     ListAlert.Add(new AlertMessage("success", "Data berhasil disimpan"));
                     TempData["ListAlert"] = ListAlert;
                 }
@@ -80,10 +63,7 @@ namespace RecycleHelperApplication.Controllers
                         DeskripsiPanduan = indexViewModel.DeskripsiPanduan,
                         IdUser = indexViewModel.IdUser,
                     });
-                    var idBahan = await detailPanduanService.Insert(new Model.Models.DetailPanduan
-                    {
-                        IdBahan = indexViewModel.IdBahan
-                    });
+
                     ListAlert.Add(new AlertMessage("success", "Data berhasil diubah"));
                     TempData["ListAlert"] = ListAlert;
                 }
@@ -99,11 +79,9 @@ namespace RecycleHelperApplication.Controllers
         public async Task<ActionResult> _PanduanTable()
         {
             List<Panduan> listPanduan = await panduanService.GetAllPanduan();
-            List<Bahan> listBahan = await bahanService.GetAllBahan();
             return PartialView(new PanduanTableViewModel
             {
-                ListPanduan = listPanduan,
-                ListBahan = listBahan
+                ListPanduan = listPanduan
             });
         }
         public async Task<ActionResult> SelectPanduanToEdit(int IdPanduan)
@@ -125,26 +103,11 @@ namespace RecycleHelperApplication.Controllers
             TempData["viewForm"] = 1;
             return RedirectToAction("Index");
         }
-        public async Task<ActionResult> Delete(int selectedId)
+        public async Task<ActionResult> Delete(string selectedId)
         {
             try
             {
-                var result = await panduanService.Delete(selectedId);
-                ListAlert.Add(new AlertMessage("success", "Data berhasil dihapus"));
-                TempData["ListAlert"] = ListAlert;
-            }
-            catch (Exception e)
-            {
-                ListAlert.Add(new AlertMessage("error", e.Message));
-                TempData["ListAlert"] = ListAlert;
-            }
-            return RedirectToAction("Index");
-        }
-        public async Task<ActionResult> DeleteMultiple(string hddSelectedId)
-        {
-            try
-            {
-                var result = await panduanService.DeleteMultiple(hddSelectedId);
+                int result = await panduanService.Delete(selectedId);
                 ListAlert.Add(new AlertMessage("success", "Data berhasil dihapus"));
                 TempData["ListAlert"] = ListAlert;
             }
