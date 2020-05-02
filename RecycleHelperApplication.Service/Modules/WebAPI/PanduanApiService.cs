@@ -1,10 +1,15 @@
-﻿using RecycleHelperApplication.Data.Repositories;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RecycleHelperApplication.Data.Repositories;
 using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
+using RecycleHelperApplication.Service.Helper.APIHelper;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +22,8 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Panduan>> GetListByUser(int userId);
         Task<Panduan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Panduan Panduan);
-        Task<ExecuteResult> Delete(int id);
+        Task<ExecuteResult> Delete(Panduan Panduan);
+        //Task<ExecuteResult> Delete(int id);
         Task<ExecuteResult> DeleteMultiple(string ids);
     }
     public class PanduanApiService : IPanduanApiService
@@ -72,7 +78,33 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
             ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
-        public async Task<ExecuteResult> Delete(int id)
+        //public async Task<ExecuteResult> Delete(int id)
+        //{
+        //    ExecuteResult ReturnValue = new ExecuteResult();
+        //    List<StoredProcedure> Data = new List<StoredProcedure>();
+
+        //    Data.Add(new StoredProcedure
+        //    {
+        //        SPName = "DetailPanduan_DeleteByPanduan @IdPanduan",
+        //        SQLParam = new SqlParameter[]
+        //        {
+        //            new SqlParameter("@IdPanduan", id)
+        //        }
+        //    });
+        //    Data.Add(new StoredProcedure
+        //    {
+        //        SPName = "Panduan_Delete @IdPanduan",
+        //        SQLParam = new SqlParameter[]
+        //        {
+        //            new SqlParameter("@IdPanduan", id)
+        //        }
+        //    });
+
+        //    ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
+        //    return ReturnValue;
+        //}
+
+        public async Task<ExecuteResult> Delete(Panduan panduan)
         {
             ExecuteResult ReturnValue = new ExecuteResult();
             List<StoredProcedure> Data = new List<StoredProcedure>();
@@ -82,7 +114,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 SPName = "DetailPanduan_DeleteByPanduan @IdPanduan",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@IdPanduan", id)
+                    new SqlParameter("@IdPanduan", panduan.IdPanduan)
                 }
             });
             Data.Add(new StoredProcedure
@@ -90,13 +122,14 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
                 SPName = "Panduan_Delete @IdPanduan",
                 SQLParam = new SqlParameter[]
                 {
-                    new SqlParameter("@IdPanduan", id)
+                    new SqlParameter("@IdPanduan", panduan.IdPanduan)
                 }
             });
 
             ReturnValue = await panduanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
+
         public async Task<ExecuteResult> DeleteMultiple(string ids)
         {
             ExecuteResult ReturnValue = new ExecuteResult();

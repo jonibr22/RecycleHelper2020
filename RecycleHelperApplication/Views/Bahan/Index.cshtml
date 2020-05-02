@@ -1,0 +1,70 @@
+﻿@model RecycleHelperApplication.ViewModels.BahanViewModels.IndexViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" id="form_bahancon">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Form Bahan</h2>
+            @using (Html.BeginForm("Save", "Bahan", FormMethod.Post, new { id = "form_bahan" }))
+            {
+                @Html.HiddenFor(model => model.IdBahan, new { Value = Model.IdBahan, Id = "idbahan_field" })
+                <div class="form-group">
+                    <div class="control-label">
+                        <b>Nama Bahan<span class="red-text">*</span></b>
+                    </div>
+                    @Html.EditorFor(model => model.NamaBahan, new { htmlAttributes = new { @class = "form-control input-sm", @id = "namabahan_field" } })
+                    <span class="red-text">
+                        @Html.ValidationMessageFor(model => model.NamaBahan)
+                    </span>
+
+                    <div class="control-label">
+                        <b>Id Kategori Bahan<span class="red-text">*</span></b>
+                    </div>
+                    @Html.EditorFor(model => model.IdKategoriBahan, new { htmlAttributes = new { @class = "form-control input-sm", @id = "idkategoribahan_field" } })
+                    <span class="red-text">
+                        @Html.ValidationMessageFor(model => model.IdKategoriBahan)
+                    </span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="container_list_bahan">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#container_list_bahan').load('@Url.Action("_BahanTable","Bahan")')
+    })
+</script>
+@if (TempData["viewForm"] == null)
+{
+    <script>
+        $(document).ready(function () {
+            $('#form_bahan').hide();
+        })
+    </script>
+}
+else
+{
+    <script>
+        $(document).ready(function () {
+            $('#form_bahan').show();
+        })
+    </script>
+}
+
+

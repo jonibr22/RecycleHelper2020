@@ -1,7 +1,7 @@
 ﻿using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
 using RecycleHelperApplication.Service.Modules.Web;
-using RecycleHelperApplication.ViewModels.BahanViewModels;
+using RecycleHelperApplication.ViewModels.PanduanViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,23 +11,18 @@ using System.Web.Mvc;
 
 namespace RecycleHelperApplication.Controllers
 {
-    public class BahanController : BaseController
+    public class PanduanController : Controller
     {
-        // GET: Bahan
+        // GET: Panduan
         //public ActionResult Index()
         //{
         //    return View();
         //}
-
-        //public ActionResult GetAllBahan()
-        //{
-
-        //}
-        private readonly IBahanService bahanService;
+        private readonly IPanduanService panduanService;
         private List<AlertMessage> ListAlert = new List<AlertMessage>();
-        public BahanController(IBahanService bahanService)
+        public PanduanController(IPanduanService panduanService)
         {
-            this.bahanService = bahanService;
+            this.panduanService = panduanService;
         }
         // GET: Bahan
         public ActionResult Index()
@@ -44,27 +39,31 @@ namespace RecycleHelperApplication.Controllers
             }
             try
             {
-                if (indexViewModel.IdBahan == 0)
+                if (indexViewModel.IdPanduan == 0)
                 {
                     // Insert
-                    int id = await bahanService.Insert(new Model.Models.Bahan
+                    int id = await panduanService.Insert(new Model.Models.Panduan
                     {
-                        IdBahan = indexViewModel.IdBahan,
-                        NamaBahan = indexViewModel.NamaBahan,
-                        IdKategoriBahan = indexViewModel.IdKategoriBahan,
+                        IdPanduan = indexViewModel.IdPanduan,
+                        NamaPanduan = indexViewModel.NamaPanduan,
+                        DeskripsiPanduan = indexViewModel.DeskripsiPanduan,
+                        IdUser = indexViewModel.IdUser,
                     });
+                
                     ListAlert.Add(new AlertMessage("success", "Data berhasil disimpan"));
                     TempData["ListAlert"] = ListAlert;
                 }
                 else
                 {
                     // Update
-                    int id = await bahanService.Update(new Model.Models.Bahan
+                    int id = await panduanService.Update(new Model.Models.Panduan
                     {
-                        IdBahan = indexViewModel.IdBahan,
-                        NamaBahan = indexViewModel.NamaBahan,
-                        IdKategoriBahan = indexViewModel.IdKategoriBahan,
+                        IdPanduan = indexViewModel.IdPanduan,
+                        NamaPanduan = indexViewModel.NamaPanduan,
+                        DeskripsiPanduan = indexViewModel.DeskripsiPanduan,
+                        IdUser = indexViewModel.IdUser,
                     });
+
                     ListAlert.Add(new AlertMessage("success", "Data berhasil diubah"));
                     TempData["ListAlert"] = ListAlert;
                 }
@@ -77,36 +76,38 @@ namespace RecycleHelperApplication.Controllers
             }
             return RedirectToAction("Index");
         }
-        public async Task<ActionResult> _BahanTable()
+        public async Task<ActionResult> _PanduanTable()
         {
-            List<Bahan> listBahan = await bahanService.GetAllBahan();
-            return PartialView(new BahanTableViewModel
+            List<Panduan> listPanduan = await panduanService.GetAllPanduan();
+            return PartialView(new PanduanTableViewModel
             {
-                ListBahan = listBahan
+                ListPanduan = listPanduan
             });
         }
-        public async Task<ActionResult> SelectBahanToEdit(int IdBahan)
+        public async Task<ActionResult> SelectPanduanToEdit(int IdPanduan)
         {
-            string NamaBahan = "";
-            int IdKategoriBahan = 0;
-            if (IdBahan != 0)
+            string NamaPanduan = "";
+            string DeskripsiPanduan = "";
+            int IdUser = 0;
+            if (IdPanduan != 0)
             {
-                Bahan bahan = await bahanService.GetById(IdBahan);
-                NamaBahan = bahan.NamaBahan;
-                IdKategoriBahan = bahan.IdKategoriBahan;
+                Panduan panduan = await panduanService.GetById(IdPanduan);
+                NamaPanduan = panduan.NamaPanduan;
+                DeskripsiPanduan = panduan.DeskripsiPanduan;
+                IdUser = panduan.IdUser;
             }
-            return Json(new { id = IdBahan, name = NamaBahan, idKategori = IdKategoriBahan });
+            return Json(new { id = IdPanduan, name = NamaPanduan, deskripsi = DeskripsiPanduan, idUser = IdUser });
         }
         public async Task<ActionResult> Add()
         {
             TempData["viewForm"] = 1;
             return RedirectToAction("Index");
         }
-        public async Task<ActionResult> Delete(string hddSelectedIds)
+        public async Task<ActionResult> Delete(string selectedId)
         {
             try
             {
-                int result = await bahanService.Delete(hddSelectedIds);
+                int result = await panduanService.Delete(selectedId);
                 ListAlert.Add(new AlertMessage("success", "Data berhasil dihapus"));
                 TempData["ListAlert"] = ListAlert;
             }
