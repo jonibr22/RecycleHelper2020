@@ -289,11 +289,12 @@
     <Content Include="Views\Shared\_SuperLayout.cshtml" />
     <Content Include="Views\KategoriBahan\Index.cshtml" />
     <Content Include="Views\KategoriBahan\_KategoriBahanTable.cshtml" />
+    <Content Include="Views\Bahan\Index.cshtml" />
+    <Content Include="Views\Bahan\_BahanTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\AjaxData\" />
-    <Folder Include="Views\Bahan\" />
     <Folder Include="Views\Panduan\" />
   </ItemGroup>
   <ItemGroup>
