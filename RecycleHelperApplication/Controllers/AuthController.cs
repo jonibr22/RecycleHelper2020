@@ -64,6 +64,8 @@ namespace RecycleHelperApplication.Controllers.Auth
                     Name = registrationViewModel.Name,
                     IdRole = 1
                 });
+                ListAlert.Add(new AlertMessage("success", "Registrasi Sukses"));
+                TempData["ListAlert"] = ListAlert;
                 return RedirectToAction("Index", "Auth");
             }
             catch (Exception e)
