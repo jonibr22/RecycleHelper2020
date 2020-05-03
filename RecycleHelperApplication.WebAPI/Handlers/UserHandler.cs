@@ -70,6 +70,14 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 {
                     throw new NotFoundException("User dengan ID tersebut tidak ditemukan");
                 }
+                if (userResponse.Username != userRequest.Username)
+                {
+                    User newUsername = await userService.GetByUsername(userRequest.Username);
+                    if(newUsername != null)
+                    {
+                        throw new NotPermittedException("Username telah dipakai");
+                    }
+                }
                 ExecuteResult result = await userService.InsertUpdate(userRequest);
                 if (result.ReturnVariable <= 0)
                 {
@@ -82,6 +90,10 @@ namespace RecycleHelperApplication.WebAPI.Handlers
                 };
             }
             catch (NotFoundException e)
+            {
+                throw e;
+            }
+            catch (NotPermittedException e)
             {
                 throw e;
             }

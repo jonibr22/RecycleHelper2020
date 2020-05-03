@@ -86,6 +86,7 @@
     <Compile Include="Helper\MyExtensions.cs" />
     <Compile Include="Helper\ReflectionExtensions.cs" />
     <Compile Include="Helper\SessionEnum.cs" />
+    <Compile Include="Helper\UserProfilePictureManager.cs" />
     <Compile Include="Helper\Util.cs" />
     <Compile Include="Modules\WebAPI\DetailPanduanApiService.cs" />
     <Compile Include="Modules\WebAPI\KategoriBahanApiService.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Modules\Web\BahanService.cs" />
     <Compile Include="Modules\Web\KategoriBahanService.cs" />
     <Compile Include="Modules\Web\PanduanService.cs" />
+    <Compile Include="Modules\Web\RoleService.cs" />
     <Compile Include="Modules\Web\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

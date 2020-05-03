@@ -13,5 +13,6 @@ namespace RecycleHelperApplication.Model.Models
         public string Password { get; set; }
         public string Name { get; set; }
         public int IdRole { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }

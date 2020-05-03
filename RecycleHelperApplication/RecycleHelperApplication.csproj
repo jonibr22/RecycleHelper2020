@@ -215,6 +215,8 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KategoriBahanController.cs" />
+    <Compile Include="Controllers\PanduanController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\DetailPanduanController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -222,9 +224,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AuthViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\AuthViewModels\RegistrationViewModel.cs" />
+    <Compile Include="ViewModels\BahanViewModels\BahanTableViewModel.cs" />
+    <Compile Include="ViewModels\BahanViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\KategoriBahanTableViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\ContributionTableViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\DetailViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\IndexViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModels\PasswordManagementViewModel.cs" />
+    <Compile Include="ViewModels\PanduanViewModel\IndexViewModel.cs" />
+    <Compile Include="ViewModels\PanduanViewModel\PanduanTableViewModel.cs" />
     <Compile Include="ViewModels\DetailPanduanViewModels\DetailPanduanViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +265,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -267,6 +278,8 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Content\images\default-avatar.png" />
+    <Content Include="Uploads\UserProfilePictures\0.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -286,12 +299,18 @@
     <Content Include="Views\Shared\_SuperLayout.cshtml" />
     <Content Include="Views\KategoriBahan\Index.cshtml" />
     <Content Include="Views\KategoriBahan\_KategoriBahanTable.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Detail.cshtml" />
+    <Content Include="Views\User\_ContributionTable.cshtml" />
+    <Content Include="Views\User\_PasswordManagement.cshtml" />
+    <Content Include="Views\Bahan\Index.cshtml" />
+    <Content Include="Views\Bahan\_BahanTable.cshtml" />
     <Content Include="Views\DetailPanduan\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\AjaxData\" />
-    <Folder Include="Views\Bahan\" />
+    <Folder Include="Views\Panduan\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -333,7 +352,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53386</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

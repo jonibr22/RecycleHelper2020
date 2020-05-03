@@ -1,10 +1,15 @@
-﻿using RecycleHelperApplication.Data.Repositories;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RecycleHelperApplication.Data.Repositories;
 using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
+using RecycleHelperApplication.Service.Helper.APIHelper;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +23,7 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
         Task<List<Bahan>> GetListByPanduan(int idPanduan);
         Task<Bahan> GetById(int id);
         Task<ExecuteResult> InsertUpdate(Bahan bahan);
-        Task<ExecuteResult> DeleteBahan(int IdBahan);
+        Task<ExecuteResult> Delete(int id);
         Task<ExecuteResult> DeleteMultiple(string ids);
     }
     public class BahanApiService : IBahanApiService
@@ -79,25 +84,24 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
             ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
-
-        public async Task<ExecuteResult> DeleteBahan(int IdBahan)
+        public async Task<ExecuteResult> Delete(int id)
         {
-            var Param = new SqlParameter[]
-            {
-                new SqlParameter("@IdBahan", IdBahan)
-            };
-
+            ExecuteResult ReturnValue = new ExecuteResult();
             List<StoredProcedure> Data = new List<StoredProcedure>();
+
             Data.Add(new StoredProcedure
             {
                 SPName = "Bahan_Delete @IdBahan",
-                SQLParam = Param
+                SQLParam = new SqlParameter[]
+                {
+                    new SqlParameter("@IdBahan", id)
+                }
             });
 
-            ExecuteResult ResultValue = (await bahanRepository.ExecMultipleSPWithTransaction(Data));
-
-            return ResultValue;
+            ReturnValue = await bahanRepository.ExecMultipleSPWithTransaction(Data);
+            return ReturnValue;
         }
+
         public async Task<ExecuteResult> DeleteMultiple(string ids)
         {
             ExecuteResult ReturnValue = new ExecuteResult();

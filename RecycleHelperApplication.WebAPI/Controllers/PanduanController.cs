@@ -119,5 +119,18 @@ namespace RecycleHelperApplication.WebAPI.Controllers
                 return Json(APIError.From(e));
             }
         }
+        [Route("Multiple/{ids}")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete(string ids)
+        {
+            try
+            {
+                return Json(await panduanHandler.DeleteMultiple(ids));
+            }
+            catch (InternalServerErrorException e)
+            {
+                return Json(APIError.From(e));
+            }
+        }
     }
 }

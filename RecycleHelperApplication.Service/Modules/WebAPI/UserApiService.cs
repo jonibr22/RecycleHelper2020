@@ -49,19 +49,21 @@ namespace RecycleHelperApplication.Service.Modules.WebAPI
 
             Data.Add(new StoredProcedure
             {
-                SPName = "User_InsertUpdate @IdUser, @Username, @Password, @Name, @IdRole ",
+                SPName = "User_InsertUpdate @IdUser, @Username, @Password, @Name, @IdRole, @PhotoUrl ",
                 SQLParam = new SqlParameter[]
                 {
                     new SqlParameter("@IdUser", user.IdUser),
                     new SqlParameter("@Username", user.Username),
                     new SqlParameter("@Password", user.Password),
                     new SqlParameter("@Name", user.Name),
-                    new SqlParameter("@IdRole", user.IdRole)
+                    new SqlParameter("@IdRole", user.IdRole),
+                    new SqlParameter("@PhotoUrl", user.PhotoUrl ?? ((object)DBNull.Value))
                 }
             });
 
             ReturnValue = await userRepository.ExecMultipleSPWithTransaction(Data);
             return ReturnValue;
         }
+       
     }
 }

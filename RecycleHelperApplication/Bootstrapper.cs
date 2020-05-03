@@ -21,6 +21,7 @@ namespace RecycleHelperApplication
         container.RegisterType<IUserService, UserService>();
         container.RegisterType<IPanduanService, PanduanService>();
         container.RegisterType<IKategoriBahanService, KategoriBahanService>();
+        container.RegisterType<IRoleService, RoleService>();
         return container;
     }
 

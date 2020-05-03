@@ -58,6 +58,10 @@ namespace RecycleHelperApplication.WebAPI.Controllers
             {
                 return Json(APIError.From(e));
             }
+            catch (NotPermittedException e)
+            {
+                return Json(APIError.From(e));
+            }
             catch (InternalServerErrorException e)
             {
                 return Json(APIError.From(e));
