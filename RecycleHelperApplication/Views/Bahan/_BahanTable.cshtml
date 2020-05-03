@@ -1,4 +1,7 @@
 ﻿@model RecycleHelperApplication.ViewModels.BahanViewModels.BahanTableViewModel
+@{ 
+    var ListKategoriBahan = Model.ListKategoriBahan;
+}
 <div style="margin-bottom: 10px">
     <div style="display: inline;">
         <h2 style="display: inline;">List Bahan</h2>
@@ -20,7 +23,8 @@
         <tr>
             <th></th>
             <th width="5%"></th>
-            <th width="75%">Nama</th>
+            <th width="37%">Nama</th>
+            <th width="38%">Kategori Bahan</th>
             <th width="20%">Toggle</th>
         </tr>
     </thead>
@@ -31,11 +35,11 @@
                 <td>@a.IdBahan</td>
                 <td>
                     <div style="text-align: center;">
-                        <span class="chkPilih">@Html.CheckBox("cbx_bahan" + a.IdBahan, false, new { value = a.IdBahan })</span>
+                        <span class="chkPilih">@Html.CheckBox("cbx_bahan" + a.IdBahan + a.IdKategoriBahan, false, new { value = a.IdBahan, a.IdKategoriBahan })</span>
                     </div>
                 </td>
                 <td>@a.NamaBahan</td>
-                <td>@a.IdKategoriBahan</td>
+                <td>@ListKategoriBahan.First(x => x.IdKategoriBahan == a.IdKategoriBahan).NamaKategoriBahan</td>
                 <td><button class='btn btn-secondary btnEdit' type="button">Edit</button></td>
             </tr>
         }
@@ -69,7 +73,7 @@
                     startLoaderScreen();
                 },
                 success: function (data) {
-                    $('#form_bahan').show();
+                    $('#form_bahancon').show();
                     $('#idbahan_field').val(data.id);
                     $('#namabahan_field').val(data.name);
                     $('#idkategoribahan_field').val(data.idKategori);
