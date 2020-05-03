@@ -1,4 +1,5 @@
 ﻿@model RecycleHelperApplication.ViewModels.PanduanViewModels.PanduanTableViewModel
+@using RecycleHelperApplication.Service.Helper;
 <div style="margin-bottom: 10px">
     <div style="display: inline;">
         <h2 style="display: inline;">List Panduan</h2>
@@ -38,22 +39,25 @@
     <tbody>
         @foreach (var a in Model.ListPanduan)
         {
-            <tr>
-                <td>@a.IdPanduan</td>
-                <td>
-                    <div style="text-align: center;">
-                        <span class="chkPilih">
-                            @Html.CheckBox("cbx_Panduan" + a.IdPanduan, false, new
-                                      {
-                                          value =
-                        a.IdPanduan
-                                      })
-                    </span>
-                </div>
-            </td>
-            <td>@a.NamaPanduan</td>
-            <td><button class='btn btn-secondary btnEdit' type="button">Manage</button></td>
-        </tr>
+            if(a.IdUser.ToString() == Session[SessionEnum.USER_ID].ToString())
+            {
+                <tr>
+                    <td>@a.IdPanduan</td>
+                    <td>
+                        <div style="text-align: center;">
+                            <span class="chkPilih">
+                                @Html.CheckBox("cbx_Panduan" + a.IdPanduan, false, new
+                                          {
+                                              value =
+                            a.IdPanduan
+                                          })
+                        </span>
+                    </div>
+                </td>
+                <td>@a.NamaPanduan</td>
+                <td><button class='btn btn-secondary btnEdit' type="button">Manage</button></td>
+             </tr>
+            }
         }
     </tbody>
 </table>
