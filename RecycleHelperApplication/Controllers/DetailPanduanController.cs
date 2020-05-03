@@ -24,7 +24,7 @@ namespace RecycleHelperApplication.Controllers
         public async System.Threading.Tasks.Task<ActionResult> Index(int IdPanduan)
         {
             Panduan panduan = await panduanService.GetById(IdPanduan);
-            List<Bahan> ListBahan = await bahanService.GetBahanByPanduan(IdPanduan);
+            List<Bahan> ListBahan = await bahanService.GetListByPanduan(IdPanduan);
             User user = await userService.GetById(panduan.IdUser);
             DetailPanduanViewModel test = new DetailPanduanViewModel
             {

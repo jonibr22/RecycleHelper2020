@@ -1,7 +1,7 @@
 ﻿using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
 using RecycleHelperApplication.Service.Modules.Web;
-using RecycleHelperApplication.ViewModels.PanduanViewModel;
+using RecycleHelperApplication.ViewModels.PanduanViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace RecycleHelperApplication.ViewModels.PanduanViewModel
+namespace RecycleHelperApplication.ViewModels.PanduanViewModels
 {
     public class PanduanTableViewModel
     {
