@@ -25,10 +25,12 @@ namespace RecycleHelperApplication.Controllers
 
         //}
         private readonly IBahanService bahanService;
+        private readonly IKategoriBahanService kategoriBahanService;
         private List<AlertMessage> ListAlert = new List<AlertMessage>();
-        public BahanController(IBahanService bahanService)
+        public BahanController(IBahanService bahanService,IKategoriBahanService kategoriBahanService)
         {
             this.bahanService = bahanService;
+            this.kategoriBahanService = kategoriBahanService;
         }
         // GET: Bahan
         public async Task<ActionResult> Index()
@@ -91,9 +93,11 @@ namespace RecycleHelperApplication.Controllers
         public async Task<ActionResult> _BahanTable()
         {
             List<Bahan> listBahan = await bahanService.GetAllBahan();
+            List<KategoriBahan> listKategoriBahan = await kategoriBahanService.GetAllKategoriBahan();
             return PartialView(new BahanTableViewModel
             {
-                ListBahan = listBahan
+                ListBahan = listBahan,
+                ListKategoriBahan = listKategoriBahan
             });
         }
         public async Task<ActionResult> SelectBahanToEdit(int IdBahan)

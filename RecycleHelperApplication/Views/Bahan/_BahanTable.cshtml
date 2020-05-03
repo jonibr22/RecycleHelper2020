@@ -1,4 +1,7 @@
 ﻿@model RecycleHelperApplication.ViewModels.BahanViewModels.BahanTableViewModel
+@{ 
+    var ListKategoriBahan = Model.ListKategoriBahan;
+}
 <div style="margin-bottom: 10px">
     <div style="display: inline;">
         <h2 style="display: inline;">List Bahan</h2>
@@ -36,7 +39,7 @@
                     </div>
                 </td>
                 <td>@a.NamaBahan</td>
-                <td>@a.IdKategoriBahan</td>
+                <td>@ListKategoriBahan.First(x => x.IdKategoriBahan == a.IdKategoriBahan).NamaKategoriBahan</td>
                 <td><button class='btn btn-secondary btnEdit' type="button">Edit</button></td>
             </tr>
         }

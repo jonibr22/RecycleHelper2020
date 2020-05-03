@@ -10,6 +10,6 @@ namespace RecycleHelperApplication.ViewModels.BahanViewModels
     public class BahanTableViewModel
     {
         public List<Bahan> ListBahan { get; set; }
-        public List<SelectListItem> ListKategoriBahan { get; set; }
+        public List<KategoriBahan> ListKategoriBahan { get; set; }
     }
 }
