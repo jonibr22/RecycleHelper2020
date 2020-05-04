@@ -1,5 +1,6 @@
 ﻿using RecycleHelperApplication.Model.Base;
 using RecycleHelperApplication.Model.Models;
+using RecycleHelperApplication.Service.Helper;
 using RecycleHelperApplication.Service.Modules.Web;
 using RecycleHelperApplication.ViewModels.PanduanViewModels;
 using System;
@@ -11,7 +12,7 @@ using System.Web.Mvc;
 
 namespace RecycleHelperApplication.Controllers
 {
-    public class PanduanController : Controller
+    public class PanduanController : BaseController
     {
         // GET: Panduan
         //public ActionResult Index()
@@ -28,6 +29,7 @@ namespace RecycleHelperApplication.Controllers
         public ActionResult Index()
         {
             IndexViewModel indexViewModel = new IndexViewModel();
+            indexViewModel.IdUser = Convert.ToInt32(Session[SessionEnum.USER_ID]);
             return View(indexViewModel);
         }
         public async Task<ActionResult> Save(IndexViewModel indexViewModel)
