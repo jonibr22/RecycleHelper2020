@@ -306,9 +306,10 @@
     <Content Include="Views\User\_PasswordManagement.cshtml" />
     <Content Include="Views\Bahan\Index.cshtml" />
     <Content Include="Views\Bahan\_BahanTable.cshtml" />
-    <Content Include="Views\DetailPanduan\index.cshtml" />
+    <Content Include="Views\DetailPanduan\Index.cshtml" />
     <Content Include="Views\Panduan\Index.cshtml" />
     <Content Include="Views\Panduan\_PanduanTable.cshtml" />
+    <Content Include="Views\DetailPanduan\TableBahan.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

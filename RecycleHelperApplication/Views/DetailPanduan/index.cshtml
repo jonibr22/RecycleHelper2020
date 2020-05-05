@@ -1,11 +1,14 @@
 ﻿@model RecycleHelperApplication.ViewModels.DetailPanduanViewModels.DetailPanduanViewModel
 @using RecycleHelperApplication.Model.Models;
+@using RecycleHelperApplication.Service.Helper;
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Bahan> ListBahan = Model.ListBahan;
     var NamaPanduan = Model.NamaPanduan;
     var DeskripsiPanduan = Model.DeskripsiPanduan;
     var UserName = Model.UserName;
+    var IdUser= Model.IdUser;
 }
 
 <!DOCTYPE html>
@@ -47,34 +50,86 @@
 </head>
 <body>
     <div class="float-container">
-        <h3>@NamaPanduan</h3>
-        by: @UserName<br /><br />
-        <div class="float-child1">
-            <table id="tbl_bahan">
-                <thead>
-                <th><h4>Bahan :</h4></th>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < ListBahan.Count; i++)
-                    {
-                        int id = ListBahan[i].IdBahan;
-                        if (id != 0)
+        @if (IdUser.ToString() != Session[SessionEnum.USER_ID].ToString())
+        {
+            <h3>@NamaPanduan</h3>
+            <p>by: @UserName</p><br />
+            <div class="float-child1">
+                <table id="tbl_bahan">
+                    <thead>
+                        <th><h4>Bahan :</h4></th>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < ListBahan.Count; i++)
                         {
-                            <tr>
-                                <td>- @ListBahan[i].NamaBahan</td>
-                            </tr>
+                            int id = ListBahan[i].IdBahan;
+                            if (id != 0)
+                            {
+                                <tr>
+                                    <td>- @ListBahan[i].NamaBahan</td>
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
-        </div>
-        <br />
+                    </tbody>
+                </table>
+            </div>
+            <br />
 
-        <div class="float-child2">
-            <h4>Keterangan :</h4>
-            <p>@DeskripsiPanduan</p>
-        </div>
-    </div>
-   
+            <div class="float-child2">
+                <h4>Keterangan :</h4>
+                <p>@DeskripsiPanduan</p>
+            </div>
+        }
+        else
+        {
+            <div class="pv_bahan">
+
+            </div>
+            using (Html.BeginForm("Save", "DetailPanduan", FormMethod.Post, new { id = "form_save_panduan" }))
+            {
+                @Html.HiddenFor(model => model.IdPanduan, new
+               {
+                   Value = Model.IdPanduan,
+                   Id ="idPanduan_field"
+               })
+                <div class="form-group">
+                    <div class="control-label">
+                        <b>Nama Panduan<span class="red-text">*</span></b>
+                    </div>
+                    @Html.EditorFor(model => model.NamaPanduan, new
+               {
+                   htmlAttributes = new
+                   {
+                       @class = "form-control input - sm",
+                       @id = "namaPanduan_field"
+                   }
+               })
+                    <span class="red-text">
+                        @Html.ValidationMessageFor(model => model.NamaPanduan)
+                    </span>
+
+                    <div class="control-label">
+                        <b>Deskripsi Panduan<span class="red-text">*</span></b>
+                    </div>
+                    @Html.TextAreaFor(model => model.DeskripsiPanduan, new
+               {
+                   htmlAttributes = new
+                   {
+                       @class = "form-control",
+                       @id = "deskripsiPanduan_field"
+                   }
+               })
+                    <span class="red-text">
+                        @Html.ValidationMessageFor(model => model.DeskripsiPanduan)
+                    </span>
+                    @Html.HiddenFor(model => model.IdUser, new
+               {
+                   Value = Model.IdUser,
+                   Id = "idUser_field"
+               })
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+        }
 </body>
 </html>

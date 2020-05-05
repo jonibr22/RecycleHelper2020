@@ -77,7 +77,7 @@ namespace RecycleHelperApplication.Controllers
                 TempData["ListAlert"] = ListAlert;
                 return View("Index", indexViewModel);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","DetailPanduan",indexViewModel);
         }
         public async Task<ActionResult> _PanduanTable()
         {

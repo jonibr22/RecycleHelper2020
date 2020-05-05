@@ -12,5 +12,6 @@ namespace RecycleHelperApplication.Model.Models
         public string NamaPanduan { get; set; }
         public string DeskripsiPanduan { get; set; }
         public int IdUser { get; set; }
+        public List<Bahan> ListBahan { get; set; }
     }
 }
