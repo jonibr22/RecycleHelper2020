@@ -1,135 +1,115 @@
-﻿@model RecycleHelperApplication.ViewModels.DetailPanduanViewModels.DetailPanduanViewModel
-@using RecycleHelperApplication.Model.Models;
+﻿@model RecycleHelperApplication.ViewModels.DetailPanduanViewModels.IndexViewModel
 @using RecycleHelperApplication.Service.Helper;
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<Bahan> ListBahan = Model.ListBahan;
-    var NamaPanduan = Model.NamaPanduan;
-    var DeskripsiPanduan = Model.DeskripsiPanduan;
-    var UserName = Model.UserName;
-    var IdUser= Model.IdUser;
 }
+<!--Name Section-->
+<div style="margin: 15px 0">
+<div class="control-label">
+    <b>Panduan</b>
+</div>
+@if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+{
+    <div id="name_fixed">
+        <h3 style="display: inline">@Model.NamaPanduan</h3>
+        <a href="javascript:void(0);" id="icon_edit"><i class="glyphicon glyphicon-edit" style="color: darkgrey"></i></a>
+    </div>
+    <div id="name_change" hidden>
+        @Html.Editor("edit_name", new { htmlAttributes = new { Value = Model.NamaPanduan, @style = "padding:0;border:0;font-size:24px;" } })
+    </div>
+}
+else
+{
+    <div id="name_fixed">
+        <h3 style="display: inline">@Model.NamaPanduan</h3>
+    </div>
+}
+</div>
+<hr />
+<!--List Bahan Section-->
+<div id="pv_BahanManagement">
 
-<!DOCTYPE html>
-<style>
-    .f1{
-        width: 50%;
-        display: inline-block;
-        background-color: dimgrey;
-        padding: 10px;
-        margin-bottom: 20px;
-    }
-     .float-container {
-	    max-width: 1460px;
-	    margin: auto;
-    }
+</div>
+<hr />
+<!--Deskripsi Section-->
+<div id="pv_Deskripsi">
 
-    .float-child1 {
-	    display: inline-block;
-	    width: 30%;
-	    min-width: 350px;
-	    padding: 0;
-	    margin: 0;
-	    position: relative;
-        padding: 10px;
-    }  
-    .float-child2 {
-	    width: 65%;
-	    min-width: 350px;
-	    display: inline-block;
-	    vertical-align: top;
-	    padding: 15px 0;
-        padding: 10px;
-    }  
-</style>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-</head>
-<body>
-    <div class="float-container">
-        @if (IdUser.ToString() != Session[SessionEnum.USER_ID].ToString())
-        {
-            <h3>@NamaPanduan</h3>
-            <p>by: @UserName</p><br />
-            <div class="float-child1">
-                <table id="tbl_bahan">
-                    <thead>
-                        <th><h4>Bahan :</h4></th>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < ListBahan.Count; i++)
-                        {
-                            int id = ListBahan[i].IdBahan;
-                            if (id != 0)
-                            {
-                                <tr>
-                                    <td>- @ListBahan[i].NamaBahan</td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <br />
-
-            <div class="float-child2">
-                <h4>Keterangan :</h4>
-                <p>@DeskripsiPanduan</p>
-            </div>
+</div>
+<!--Script-->
+<script>
+    $(document).ready(function(){
+        $('#ddlKategoriBahan').trigger('change')
+        $("#pv_BahanManagement").load('@Url.Action("_TableBahan", "DetailPanduan", new { idPanduan = Model.IdPanduan })')
+        $("#pv_Deskripsi").load('@Url.Action("_Description", "DetailPanduan", new { idPanduan = Model.IdPanduan })')
+    })
+    function ddlKategoriBahanChange(IDKategoriBahan) {
+        var data = {
+            IDKategoriBahan: IDKategoriBahan
         }
-        else
-        {
-            <div class="pv_bahan">
+        $.ajax({
+            url: location.origin + "/AjaxData/GetListBahanByKategori",
+            type: 'POST',
+            async: false,
+            data: data,
+            beforeSend: function(e){
+                startLoaderScreen();
+            },
+            success: function (res) {
+                $('#ddlBahan').empty();
 
-            </div>
-            using (Html.BeginForm("Save", "DetailPanduan", FormMethod.Post, new { id = "form_save_panduan" }))
-            {
-                @Html.HiddenFor(model => model.IdPanduan, new
-               {
-                   Value = Model.IdPanduan,
-                   Id ="idPanduan_field"
-               })
-                <div class="form-group">
-                    <div class="control-label">
-                        <b>Nama Panduan<span class="red-text">*</span></b>
-                    </div>
-                    @Html.EditorFor(model => model.NamaPanduan, new
-               {
-                   htmlAttributes = new
-                   {
-                       @class = "form-control input - sm",
-                       @id = "namaPanduan_field"
-                   }
-               })
-                    <span class="red-text">
-                        @Html.ValidationMessageFor(model => model.NamaPanduan)
-                    </span>
-
-                    <div class="control-label">
-                        <b>Deskripsi Panduan<span class="red-text">*</span></b>
-                    </div>
-                    @Html.TextAreaFor(model => model.DeskripsiPanduan, new
-               {
-                   htmlAttributes = new
-                   {
-                       @class = "form-control",
-                       @id = "deskripsiPanduan_field"
-                   }
-               })
-                    <span class="red-text">
-                        @Html.ValidationMessageFor(model => model.DeskripsiPanduan)
-                    </span>
-                    @Html.HiddenFor(model => model.IdUser, new
-               {
-                   Value = Model.IdUser,
-                   Id = "idUser_field"
-               })
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
+                $.each(res, function (index, paroki) {
+                    $('#ddlBahan').append($('<option/>', {
+                        value: paroki.Value, text: paroki.Text
+                    }));
+                });
+            },
+            error: function (err) {
+                console.log(err);
             }
+        });
+    }
+</script>
+@if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+{
+<script>
+$('#icon_edit').click(function() {
+    $('#name_fixed').hide();
+    $('#name_change').show();
+    $('#edit_name').trigger('focus')
+})
+$('#edit_name').blur(function() {
+    var newName = $('#edit_name').val()
+    $.ajax({
+        type: 'POST',
+        url: location.origin + '/DetailPanduan/_ChangeName',
+        data:{
+            id: @Model.IdPanduan,
+            name: newName
+        },
+        beforeSend: function(){
+            startLoaderScreen()
+        },
+        success: function(data){
+            if (data.status == "success")
+            {
+                $('#edit_name').val(data.name)
+                $('#name_fixed>h3').html(data.name)
+                $('#name_change').hide();
+                $('#name_fixed').show();
+            }
+            else
+            {
+                $('#edit_name').val('@Model.NamaPanduan')
+                $('#name_change').hide();
+                $('#name_fixed').show();
+                showAlert('error', data.message)
+            }
+        },
+        error: function(e){
+            showAlert('error', 'request failed')
         }
-</body>
-</html>
+    })
+})
+</script>
+}

@@ -138,7 +138,7 @@
                         @if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
                         {
                         <div style="display: inline;" class="pull-right">
-                            <button class="btn btn-primary"><i class="glyphicon glyphicon-cog" style="color: white"></i> Manage</button>
+                            <a href="@Url.Action("Index","Panduan")" class="btn btn-primary"><i class='glyphicon glyphicon-cog' style='color: white'></i> Manage</a>
                         </div>
                         }
                     </div>

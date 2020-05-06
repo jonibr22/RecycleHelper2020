@@ -55,7 +55,7 @@
                     </div>
                 </td>
                 <td>@a.NamaPanduan</td>
-                <td><button class='btn btn-secondary btnEdit' type="button">Manage</button></td>
+                <td>@Html.ActionLink("Look Up","Index","DetailPanduan",new { id = a.IdPanduan },new { @class = "btn btn-danger"})</td>
              </tr>
             }
         }
@@ -89,31 +89,6 @@
         fixedHeader: true
     });
 
-    $('#categories-datatable tbody').on('click', '.btnEdit', function () {
-        var data = table.row($(this).parents('tr')).data();
-        var IdPanduan = data[0];
-        if (IdPanduan !== undefined) {
-            var targetUrl = location.origin + '/Panduan/SelectPanduanToEdit';
-            $.ajax({
-                type: 'POST',
-                url: targetUrl,
-                data: {
-                    'IdPanduan': IdPanduan
-                },
-                beforeSend: function (e) {
-                    startLoaderScreen();
-                },
-                success: function (data) {
-                    $('#form_Panduan').show();
-                    $('#idPanduan_field').val(data.id);
-                    $('#namaPanduan_field').val(data.name);
-                },
-                error: function (e) {
-                    showAlert('error', e);
-                }
-            })
-        }
-    });
     $('#categories-datatable tbody').on('change', 'td', function (event) {
         var deletedList = [];
         var value = $(this).find('input').attr('value');

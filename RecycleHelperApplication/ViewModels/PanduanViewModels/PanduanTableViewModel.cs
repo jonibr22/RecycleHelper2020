@@ -9,7 +9,6 @@ namespace RecycleHelperApplication.ViewModels.PanduanViewModels
     public class PanduanTableViewModel
     {
         public List<Panduan> ListPanduan { get; set; }
-        public List<DetailPanduan> ListDetailPanduan { get; set; }
-        public List<Bahan> ListBahan { get; set; }
+        public int IdUser { get; set; }
     }
 }

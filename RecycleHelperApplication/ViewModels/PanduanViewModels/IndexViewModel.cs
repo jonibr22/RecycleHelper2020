@@ -11,8 +11,6 @@ namespace RecycleHelperApplication.ViewModels.PanduanViewModels
         public int IdPanduan { get; set; }
         [Required(ErrorMessage = "Nama Panduan harus diisi")]
         public string NamaPanduan { get; set; }
-        [Required(ErrorMessage = "Deskripsi Panduan harus diisi")]
-        public string DeskripsiPanduan { get; set; }
         public int IdUser { get; set; }
         public string NamaBahan { get; set; }
         //[Required(ErrorMessage = "Id Bahan harus diisi")]

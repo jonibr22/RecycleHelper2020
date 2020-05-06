@@ -96,6 +96,7 @@
     <Compile Include="Modules\WebAPI\UserApiService.cs" />
     <Compile Include="Modules\Web\AuthService.cs" />
     <Compile Include="Modules\Web\BahanService.cs" />
+    <Compile Include="Modules\Web\DetailPanduanService.cs" />
     <Compile Include="Modules\Web\KategoriBahanService.cs" />
     <Compile Include="Modules\Web\PanduanService.cs" />
     <Compile Include="Modules\Web\RoleService.cs" />

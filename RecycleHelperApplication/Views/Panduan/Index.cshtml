@@ -30,19 +30,6 @@
                     <span class="red-text">
                         @Html.ValidationMessageFor(model => model.NamaPanduan)
                     </span>
-
-                    <div class="control-label">
-                        <b>Deskripsi Panduan<span class="red-text">*</span></b>
-                    </div>
-                    @Html.TextAreaFor(model => model.DeskripsiPanduan, new
-                       {
-                           htmlAttributes = new
-                           {
-                               @class = "form-control", @id = "deskripsiPanduan_field" }
-                       })
-                    <span class="red-text">
-                        @Html.ValidationMessageFor(model => model.DeskripsiPanduan)
-                    </span>
                     @Html.HiddenFor(model => model.IdUser, new
                        {
                            Value = Model.IdUser,

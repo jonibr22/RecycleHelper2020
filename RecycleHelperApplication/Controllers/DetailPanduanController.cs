@@ -2,7 +2,6 @@
 using RecycleHelperApplication.Model.Models;
 using RecycleHelperApplication.Service.Helper;
 using RecycleHelperApplication.Service.Modules.Web;
-using RecycleHelperApplication.ViewModels.AuthViewModels;
 using RecycleHelperApplication.ViewModels.DetailPanduanViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,109 +12,157 @@ using System.Web.Mvc;
 
 namespace RecycleHelperApplication.Controllers
 {
-    public class DetailPanduanController : Controller
+    public class DetailPanduanController : BaseController
     {
         private readonly IPanduanService panduanService;
         private readonly IBahanService bahanService;
         private readonly IUserService userService;
+        private readonly IDetailPanduanService detailPanduanService;
         private List<AlertMessage> ListAlert = new List<AlertMessage>();
-        public DetailPanduanController(IPanduanService panduanService, IBahanService bahanService, IUserService userService)
+        public DetailPanduanController(IPanduanService panduanService, IBahanService bahanService, IUserService userService, IDetailPanduanService detailPanduanService)
         {
             this.panduanService = panduanService;
             this.bahanService = bahanService;
             this.userService = userService;
+            this.detailPanduanService = detailPanduanService;
         }
         // GET: Panduan
-        public async System.Threading.Tasks.Task<ActionResult> Index(int IdPanduan)
+        public async Task<ActionResult> Index(int id)
         {
-            Panduan panduan = await panduanService.GetById(IdPanduan);
-            List<Bahan> ListBahan = await bahanService.GetListByPanduan(IdPanduan);
+            Panduan panduan = await panduanService.GetById(id);
             User user = await userService.GetById(panduan.IdUser);
-            DetailPanduanViewModel test = new DetailPanduanViewModel
+            IndexViewModel indexViewModel = new IndexViewModel
             {
                 IdPanduan = panduan.IdPanduan,
-                ListBahan = ListBahan,
                 NamaPanduan = panduan.NamaPanduan,
-                DeskripsiPanduan = panduan.DeskripsiPanduan,
                 UserName = user.Name,
                 IdUser = user.IdUser
             };
-            await SetDropdownIndex(test);
-            return View(test);
+            return View(indexViewModel);
         }
-
-        private async Task SetDropdownIndex(DetailPanduanViewModel detailPanduanViewModel)
+        public async Task<ActionResult> _TableBahan(int idPanduan)
         {
-            detailPanduanViewModel.ListKategoriBahan = await DropdownHelper.GetKategoriBahanDropdown();
-            detailPanduanViewModel.ListPilihanBahan = await DropdownHelper.GetAllBahanDropdown();
-        }
-        public async Task<ActionResult> Search(DetailPanduanViewModel detailPanduanViewModel)
-        {
-            if (!ModelState.IsValid && detailPanduanViewModel.FromRemoveBahan == 0)
+            Panduan panduan = await panduanService.GetById(idPanduan);
+            TableBahanViewModel tableBahanViewModel = new TableBahanViewModel
             {
-                await SetDropdownIndex(detailPanduanViewModel);
-                return View("Index", detailPanduanViewModel);
-            }
-            ModelState.Clear();
-            detailPanduanViewModel.FromRemoveBahan = 0;
-            string selectedBahan = detailPanduanViewModel.SelectedBahanIds;
-            selectedBahan += "," + detailPanduanViewModel.IdBahan.ToString();
-            //remove duplicate
-            selectedBahan = selectedBahan.Split(',').Distinct().Aggregate((a, b) => a + "," + b);
-            detailPanduanViewModel.SelectedBahanIds = selectedBahan;
-
-            await SetDropdownIndex(detailPanduanViewModel);
-            return View("Index", detailPanduanViewModel);
+                IdPanduan = idPanduan,
+                IdUser = panduan.IdUser
+            };
+            tableBahanViewModel.ListSelectedBahan = await bahanService.GetListByPanduan(idPanduan);
+            await SetDropdownPartial(tableBahanViewModel);
+            return PartialView(tableBahanViewModel);
         }
-
-        public async Task<ActionResult> Save(DetailPanduanViewModel detailPanduanViewModel)
+        public async Task<ActionResult> _Description(int idPanduan)
+        {
+            Panduan panduan = await panduanService.GetById(idPanduan);
+            DescriptionViewModel descriptionViewModel = new DescriptionViewModel
+            {
+                IdPanduan = panduan.IdPanduan,
+                DeskripsiPanduan = panduan.DeskripsiPanduan,
+                IdUser = panduan.IdUser
+            };
+            return PartialView(descriptionViewModel);
+        }
+        public async Task<ActionResult> SaveDeskripsi(DescriptionViewModel descriptionViewModel)
+        {
+            try
+            {
+                Panduan panduan = await panduanService.GetById(descriptionViewModel.IdPanduan);
+                if (ModelState.IsValid)
+                {
+                    panduan.DeskripsiPanduan = descriptionViewModel.DeskripsiPanduan;
+                    int result = await panduanService.Update(panduan);
+                    ViewBag.ShowAlertTableBahan = 1;
+                    ViewBag.StatusAlert = "success";
+                    ViewBag.MessageAlert = "Deskripsi Panduan berhasil diupdate";
+                }
+                descriptionViewModel.IdPanduan = panduan.IdPanduan;
+                descriptionViewModel.DeskripsiPanduan = panduan.DeskripsiPanduan;
+                descriptionViewModel.IdUser = panduan.IdUser;
+                return PartialView("_Description",descriptionViewModel);
+            }
+            catch(Exception e)
+            {
+                ViewBag.ShowAlertTableBahan = 1;
+                ViewBag.StatusAlert = "error";
+                ViewBag.MessageAlert = e.Message;
+                return PartialView("_Description",descriptionViewModel);
+            }
+        }
+        private async Task SetDropdownPartial(TableBahanViewModel tableBahanViewModel)
+        {
+            tableBahanViewModel.ListKategoriBahan = await DropdownHelper.GetKategoriBahanDropdown();
+            tableBahanViewModel.ListBahan = await DropdownHelper.GetAllBahanDropdown();
+        }
+        public async Task<ActionResult> _AddBahan(TableBahanViewModel tableBahanViewModel)
         {
             if (!ModelState.IsValid)
             {
-                TempData["viewForm"] = 1;
-                return View("Index", detailPanduanViewModel);
+                await SetDropdownPartial(tableBahanViewModel);
+                tableBahanViewModel.ListSelectedBahan = await bahanService.GetListByPanduan(tableBahanViewModel.IdPanduan);
+                return PartialView("_TableBahan", tableBahanViewModel);
             }
+            ViewBag.ShowAlertTableBahan = 1;
             try
             {
-                if (detailPanduanViewModel.IdPanduan == 0)
+                await detailPanduanService.Insert(new DetailPanduan
                 {
-                    // Insert
-                    int id = await panduanService.Insert(new Model.Models.Panduan
-                    {
-                        IdPanduan = detailPanduanViewModel.IdPanduan,
-                        NamaPanduan = detailPanduanViewModel.NamaPanduan,
-                        DeskripsiPanduan = detailPanduanViewModel.DeskripsiPanduan,
-                        IdUser = detailPanduanViewModel.IdUser,
-                        ListBahan = detailPanduanViewModel.ListBahan
-                    });
-
-                    ListAlert.Add(new AlertMessage("success", "Data berhasil disimpan"));
-                    TempData["ListAlert"] = ListAlert;
-                }
-                else
-                {
-                    // Update
-                    int id = await panduanService.Update(new Model.Models.Panduan
-                    {
-                        IdPanduan = detailPanduanViewModel.IdPanduan,
-                        NamaPanduan = detailPanduanViewModel.NamaPanduan,
-                        DeskripsiPanduan = detailPanduanViewModel.DeskripsiPanduan,
-                        IdUser = detailPanduanViewModel.IdUser,
-                        ListBahan = detailPanduanViewModel.ListBahan
-                    });
-
-                    ListAlert.Add(new AlertMessage("success", "Data berhasil diubah"));
-                    TempData["ListAlert"] = ListAlert;
-                }
+                    IdBahan = tableBahanViewModel.IdBahan,
+                    IdPanduan = tableBahanViewModel.IdPanduan
+                });
+                ViewBag.StatusAlert = "success";
+                ViewBag.MessageAlert = "Data berhasil ditambah";
             }
-            catch (Exception e)
+            catch(Exception e)
+            {
+                ViewBag.StatusAlert = "error";
+                ViewBag.MessageAlert = e.Message;
+            }
+            tableBahanViewModel = new TableBahanViewModel
+            {
+                IdPanduan = tableBahanViewModel.IdPanduan,
+                IdUser = tableBahanViewModel.IdUser
+            };
+            tableBahanViewModel.ListSelectedBahan = await bahanService.GetListByPanduan(tableBahanViewModel.IdPanduan);
+            await SetDropdownPartial(tableBahanViewModel);
+            return PartialView("_TableBahan",tableBahanViewModel);
+        }
+        public async Task<ActionResult> _DeleteBahan(int idBahan,int idPanduan)
+        {
+            try
+            {
+                await detailPanduanService.Delete(new DetailPanduan
+                {
+                    IdBahan = idBahan,
+                    IdPanduan = idPanduan
+                });
+                ListAlert.Add(new AlertMessage("success", "Data berhasil delete"));
+                TempData["ListAlert"] = ListAlert;
+            }
+            catch(Exception e)
             {
                 ListAlert.Add(new AlertMessage("error", e.Message));
                 TempData["ListAlert"] = ListAlert;
-                return View("Index", detailPanduanViewModel);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { id = idPanduan });
         }
-
+        public async Task<JsonResult> _ChangeName(int id, string name)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(name))
+                {
+                    throw new Exception("Nama tidak boleh kosong");
+                }
+                Panduan panduan = await panduanService.GetById(id);
+                panduan.NamaPanduan = name;
+                int result = await panduanService.Update(panduan);
+                return Json(new { status = "success", message = "", name = name });
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = "error", message = e.Message });
+            }
+        }
     }
 }

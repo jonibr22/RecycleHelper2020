@@ -19,7 +19,7 @@ namespace RecycleHelperApplication.WebAPI.Controllers
         {
             this.detailPanduanHandler = detailPanduanHandler;
         }
-        [Route("")]
+        [Route("Insert")]
         [HttpPost]
         public async Task<IHttpActionResult> Insert(JObject body)
         {
@@ -36,8 +36,8 @@ namespace RecycleHelperApplication.WebAPI.Controllers
                 return Json(APIError.From(e));
             }
         }
-        [Route("")]
-        [HttpDelete]
+        [Route("Delete")]
+        [HttpPost]
         public async Task<IHttpActionResult> Delete(JObject body)
         {
             try

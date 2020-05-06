@@ -42,7 +42,6 @@ namespace RecycleHelperApplication.WebAPI
             container.RegisterType<IPanduanRepository, PanduanRepository>();
             container.RegisterType<IPanduanApiService, PanduanApiService>();
             container.RegisterType<IPanduanHandler, PanduanHandler>();
-
             return container;
         }
     }

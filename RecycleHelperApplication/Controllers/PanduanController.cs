@@ -49,26 +49,19 @@ namespace RecycleHelperApplication.Controllers
                     {
                         IdPanduan = indexViewModel.IdPanduan,
                         NamaPanduan = indexViewModel.NamaPanduan,
-                        DeskripsiPanduan = indexViewModel.DeskripsiPanduan,
+                        DeskripsiPanduan = "",
                         IdUser = indexViewModel.IdUser,
                     });
-                
-                    ListAlert.Add(new AlertMessage("success", "Data berhasil disimpan"));
+                    ListAlert.Add(new AlertMessage("success", "Panduan berhasil disimpan! Silakan mengisi detailnya"));
                     TempData["ListAlert"] = ListAlert;
+                    return RedirectToAction($"Index/{id}", "DetailPanduan");
                 }
                 else
                 {
-                    // Update
-                    int id = await panduanService.Update(new Model.Models.Panduan
-                    {
-                        IdPanduan = indexViewModel.IdPanduan,
-                        NamaPanduan = indexViewModel.NamaPanduan,
-                        DeskripsiPanduan = indexViewModel.DeskripsiPanduan,
-                        IdUser = indexViewModel.IdUser,
-                    });
-
-                    ListAlert.Add(new AlertMessage("success", "Data berhasil diubah"));
+                    // Update Forbidden
+                    ListAlert.Add(new AlertMessage("error", "Ga boleh update disini"));
                     TempData["ListAlert"] = ListAlert;
+                    return View("Index", indexViewModel);
                 }
             }
             catch (Exception e)
@@ -77,40 +70,26 @@ namespace RecycleHelperApplication.Controllers
                 TempData["ListAlert"] = ListAlert;
                 return View("Index", indexViewModel);
             }
-            return RedirectToAction("Index","DetailPanduan",indexViewModel);
         }
         public async Task<ActionResult> _PanduanTable()
         {
             List<Panduan> listPanduan = await panduanService.GetAllPanduan();
             return PartialView(new PanduanTableViewModel
             {
-                ListPanduan = listPanduan
+                ListPanduan = listPanduan,
+                IdUser = Convert.ToInt32(Session[SessionEnum.USER_ID])
             });
-        }
-        public async Task<ActionResult> SelectPanduanToEdit(int IdPanduan)
-        {
-            string NamaPanduan = "";
-            string DeskripsiPanduan = "";
-            int IdUser = 0;
-            if (IdPanduan != 0)
-            {
-                Panduan panduan = await panduanService.GetById(IdPanduan);
-                NamaPanduan = panduan.NamaPanduan;
-                DeskripsiPanduan = panduan.DeskripsiPanduan;
-                IdUser = panduan.IdUser;
-            }
-            return Json(new { id = IdPanduan, name = NamaPanduan, deskripsi = DeskripsiPanduan, idUser = IdUser });
         }
         public async Task<ActionResult> Add()
         {
             TempData["viewForm"] = 1;
             return RedirectToAction("Index");
         }
-        public async Task<ActionResult> Delete(string selectedId)
+        public async Task<ActionResult> Delete(string hddSelectedIds)
         {
             try
             {
-                int result = await panduanService.Delete(selectedId);
+                int result = await panduanService.Delete(hddSelectedIds);
                 ListAlert.Add(new AlertMessage("success", "Data berhasil dihapus"));
                 TempData["ListAlert"] = ListAlert;
             }

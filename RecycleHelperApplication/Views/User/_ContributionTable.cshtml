@@ -22,7 +22,7 @@
                         <span class="label label-default">@b.NamaBahan</span>
                     }
                 </td>
-                <td><button class="btn btn-secondary">Look Up</button></td>
+                <td>@Html.ActionLink("Look Up",$"Index/{a.IdPanduan}","DetailPanduan",new { },new { @class = "btn btn-danger"})</td>
             </tr>
         }
     </tbody>

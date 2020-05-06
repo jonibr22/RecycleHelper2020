@@ -14,6 +14,7 @@ namespace RecycleHelperApplication.Controllers.Auth
 {
     public class AuthController : Controller
     {
+        private const int ROLE_MEMBER = 1;
         private readonly IAuthService authService;
         private List<AlertMessage> ListAlert = new List<AlertMessage>();
 
@@ -62,7 +63,7 @@ namespace RecycleHelperApplication.Controllers.Auth
                     Username = registrationViewModel.Username,
                     Password = registrationViewModel.Password,
                     Name = registrationViewModel.Name,
-                    IdRole = 1
+                    IdRole = ROLE_MEMBER
                 });
                 ListAlert.Add(new AlertMessage("success", "Registrasi Sukses"));
                 TempData["ListAlert"] = ListAlert;

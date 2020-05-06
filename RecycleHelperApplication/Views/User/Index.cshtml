@@ -15,7 +15,8 @@
     <thead>
         <tr>
             <th></th>
-            <th width="50%">Nama</th>
+            <th width="5%">Photo</th>
+            <th width="45%">Nama</th>
             <th width="15%">Role</th>
             <th width="25%">Username</th>
             <th width="10%">Toggle</th>
@@ -26,10 +27,11 @@
         {
             <tr>
                 <td>@a.IdUser</td>
+                <td><img src="@UserProfilePictureManager.GetProfilePictureOrDefaultIfFileNameIsNull(a.PhotoUrl)" style="width: 50px;height: 50px"/></td>
                 <td>@a.Name</td>
                 <td>@Model.ListRole.First(x => x.IdRole == a.IdRole).NamaRole</td>
                 <td>@a.Username</td>
-                <td>@Html.ActionLink("Look Up",$"Detail/{a.IdUser}","User", new { }, new { @class = "btn btn-secondary" })</td>
+                <td>@Html.ActionLink("Look Up",$"Detail/{a.IdUser}","User", new { }, new { @class = "btn btn-danger" })</td>
             </tr>
         }
     </tbody>
@@ -41,7 +43,8 @@
             { visible: false, targets: [0] },
             { orderable: false, targets: [1] },
             { orderable: true, targets: [2] },
-            { orderable: false, targets: [3] }
+            { orderable: true, targets: [3] },
+            { orderable: false, targets: [4] }
         ],
         responsive: true,
         autoWidth: false,

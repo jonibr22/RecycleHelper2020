@@ -1,5 +1,7 @@
-﻿@{ 
+﻿@using RecycleHelperApplication.Service.Helper
+@{ 
     Layout = "~/Views/Shared/_SuperLayout.cshtml";
+    const int ROLE_ADMIN = 2;
 }
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -16,8 +18,10 @@
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
             </ul>
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Panduan", "Index", "Panduan")</li>
+                <li>@Html.ActionLink("My Panduan", "Index", "Panduan")</li>
             </ul>
+            @if (Session[SessionEnum.USER_ID].ToString() == ROLE_ADMIN.ToString())
+            {
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage <span class="caret"></span></a>
@@ -28,11 +32,15 @@
                     </ul>
                 </li>
             </ul>
+            }
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Users", "Index", "User")</li>
             </ul>
             <ul class="nav navbar-nav pull-right">
                 <li>@Html.ActionLink("Logout", "Logout", "Auth")</li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li><a href="@Url.Action($"Detail/{Session[SessionEnum.USER_ID].ToString()}","User")">My Account</a></li>
             </ul>
         </div>
     </div>

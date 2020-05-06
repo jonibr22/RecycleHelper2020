@@ -1,0 +1,54 @@
+﻿@model RecycleHelperApplication.ViewModels.DetailPanduanViewModels.DescriptionViewModel
+@using RecycleHelperApplication.Service.Helper
+@if (ViewBag.ShowAlertTableBahan == 1)
+{
+    <script>
+    $(document).ready(function () {
+        showAlert('@ViewBag.StatusAlert','@ViewBag.MessageAlert')
+    })
+    </script>
+}
+@if (Model.IdUser == Convert.ToInt32(Session[SessionEnum.USER_ID]))
+{
+    using (Ajax.BeginForm("SaveDeskripsi", "DetailPanduan", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "pv_Deskripsi"}))
+    {
+        @Html.HiddenFor(model => model.IdPanduan, new { Value = Model.IdPanduan })
+        <div class="f">
+            <div class="control-label">
+                <b>Deskripsi<span class="red-text">*</span></b>
+            </div>
+            @Html.TextAreaFor(model => model.DeskripsiPanduan,
+                 new
+                 {
+                     @cols = "200",
+                     @rows = "20",
+                     @class = "input-sm form-control",
+                     @style = "max-width: 100%;resize: none"
+                 })
+            <span class="red-text">
+                @Html.ValidationMessageFor(model => model.DeskripsiPanduan)
+            </span>
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    }
+}
+else
+{
+    <div class="form-group">
+        <div class="control-label">
+            <b>Deskripsi</b>
+        </div>
+        @Html.TextAreaFor(model => model.DeskripsiPanduan,
+            new
+            {
+                @class = "input-sm form-control",
+                @disabled = "disabled",
+                @cols = "200",
+                @rows = "20",
+                @style = "max-width: 100%;resize: none"
+            })
+    </div>
+}

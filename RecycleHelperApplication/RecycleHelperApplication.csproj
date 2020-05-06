@@ -226,6 +226,8 @@
     <Compile Include="ViewModels\AuthViewModels\RegistrationViewModel.cs" />
     <Compile Include="ViewModels\BahanViewModels\BahanTableViewModel.cs" />
     <Compile Include="ViewModels\BahanViewModels\IndexViewModel.cs" />
+    <Compile Include="ViewModels\DetailPanduanViewModels\DescriptionViewModel.cs" />
+    <Compile Include="ViewModels\DetailPanduanViewModels\TableBahanViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\KategoriBahanViewModels\KategoriBahanTableViewModel.cs" />
@@ -235,7 +237,7 @@
     <Compile Include="ViewModels\UserViewModels\PasswordManagementViewModel.cs" />
     <Compile Include="ViewModels\PanduanViewModels\IndexViewModel.cs" />
     <Compile Include="ViewModels\PanduanViewModels\PanduanTableViewModel.cs" />
-    <Compile Include="ViewModels\DetailPanduanViewModels\DetailPanduanViewModel.cs" />
+    <Compile Include="ViewModels\DetailPanduanViewModels\IndexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -309,7 +311,8 @@
     <Content Include="Views\DetailPanduan\Index.cshtml" />
     <Content Include="Views\Panduan\Index.cshtml" />
     <Content Include="Views\Panduan\_PanduanTable.cshtml" />
-    <Content Include="Views\DetailPanduan\TableBahan.cshtml" />
+    <Content Include="Views\DetailPanduan\_TableBahan.cshtml" />
+    <Content Include="Views\DetailPanduan\_Description.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

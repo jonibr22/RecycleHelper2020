@@ -40,7 +40,7 @@
     }  
     
 </style>
-<h2>Define your Ingredients</h2>
+<h2>Pilih Bahanmu</h2>
 <div class="float-container">
     <div class="float-child1">
         @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "form_listing_search" }))
@@ -111,7 +111,7 @@
     <table id="tbl_search">
         <thead>
         <th>Name</th>
-        <th>Description</th>
+        <th>Bahan</th>
         <th>Author</th>
         <th class="no-sort">Toggle</th>
         </thead>
@@ -120,9 +120,16 @@
             {
                 <tr>
                     <td>@item.NamaPanduan</td>
-                    <td>@item.DeskripsiPanduan</td>
-                    <td>@ListUser.FirstOrDefault(x => x.IdUser == item.IdUser).Name</td>
-                    <td><button class="btn btn-danger" >@Html.ActionLink("Find Out","Index","DetailPanduan",new { IdPanduan = item.IdPanduan}, new { id = "form_kategori", @style = "color: White; font-style: none;" })</button></td>
+                    <td>
+                        @foreach (var i in item.ListBahan)
+                        {
+                        <span class="label label-default">@ListBahan.First(x => x.Value == i.IdBahan.ToString()).Text</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink(ListUser.FirstOrDefault(x => x.IdUser == item.IdUser).Name,$"Detail/{item.IdUser}","User",new { },new { })
+                    </td>
+                    <td>@Html.ActionLink("Find Out",$"Index/{item.IdPanduan}","DetailPanduan",new { }, new { id = "form_kategori", @class = "btn btn-danger" })</td>
                 </tr>
             }
         </tbody>
